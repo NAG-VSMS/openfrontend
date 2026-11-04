@@ -1,3 +1,8 @@
+---
+description: >-
+  Configure Vertex AI Workbench notebooks in the Open Front End: trusted users, machine type presets, storage mounts and troubleshooting.
+---
+
 # Workbench Management
 
 The Workbench feature provides a way to create and control VertexAI
@@ -50,7 +55,7 @@ An administrator can configure any type of machine type that is
 available. Users with the "Normal User" class will only be able to
 create workbenches using the preset machine type configurations while
 users with the "Viewer" class will not be able to create workbenches
-for themselves. The HPC toolkit frontend comes with some
+for themselves. The Cluster Toolkit FrontEnd comes with some
 pre-configured workbench presets:
 - Small - 1x core with 3840 Memory (n1-standard-1)
 - Medium - 2x cores with 7680 Memory (n1-standard-2)
@@ -97,6 +102,10 @@ If a workbench is stuck in "Creating" status this can be resolved by
 manually changing the status back to newly created in the admin
 portal and then starting the creation process again. Logs for this
 process can be seen at
-`$HPCtoolkitHome/frontend/workbenches/workbench_##/terraform/google/`
-where HPCtoolkitHome is normally /opt/gcluster and ## will be the id
+`$TOOLKIT_HOME/frontend/workbenches/workbench_##/terraform/google/`
+where TOOLKIT_HOME is normally /opt/gcluster and ## will be the id
 number of the workbench in question.
+
+---
+
+*This guide is adapted from [`WorkbenchAdmin.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/WorkbenchAdmin.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

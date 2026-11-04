@@ -1,14 +1,40 @@
 site_name: Open Front End
+site_url: https://openfrontend.org/
+site_description: >-
+  The Open Front End is an open-source web interface for the Google Cloud
+  Cluster Toolkit (formerly HPC Toolkit). Deploy Slurm HPC clusters, install
+  applications with Spack, submit jobs and open remote desktops from a browser.
+site_author: NAG
+repo_url: https://github.com/GoogleCloudPlatform/cluster-toolkit
+repo_name: GitHub
+edit_uri: ""
 
 theme:
   name: material
   custom_dir: theme/custom
   palette:
-    primary: custom
+    # Material 3 colour roles live in docs/stylesheets/extra.css; "custom"
+    # tells the theme not to apply one of its own colour presets.
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   font:
-    text: Nunito
+    text: Roboto
     code: Roboto Mono
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
@@ -19,15 +45,18 @@ theme:
     - search.suggest
     - search.highlight
     - toc.follow
+    - content.code.copy
+  favicon: images/favicon.svg
   icon:
     repo: fontawesome/brands/github
-    logo: material/lan
 
 plugins:
   - search
 
 nav:
   - Home: index.md
+  - Tutorials:
+    - Deploy with Cloud Shell: tutorials/deploy-with-cloud-shell.md
   - Users:
     - User Guide: users/user_guide.md
     - Workbench User Guide: users/workbench_user_guide.md
@@ -40,9 +69,33 @@ nav:
   - Developers:
     - Developer Guide: developers/developer_guide.md
 
+extra:
+  contact_url: https://nag.com/contact-us/
+  # "Open in Cloud Shell" link for the deployment tutorial. Point it at the
+  # Cluster Toolkit repository once the tutorial is merged upstream, so it
+  # opens in the user's regular (credentialed) Cloud Shell environment.
+  cloudshell_tutorial_url: >-
+    https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/NAG-VSMS/openfrontend&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/deploy-with-cloud-shell.md&cloudshell_workspace=.&show=terminal
+  analytics:
+    provider: google
+    # TODO: replace with the real GA4 measurement ID (Admin > Data streams)
+    property: G-XXXXXXXXXX
+  consent:
+    title: Cookie consent
+    description: >-
+      We use Google Analytics to see which pages are visited and whether the
+      documentation is useful, so we can improve it. Nothing is used for
+      advertising. You can change your choice at any time from the
+      "Cookie settings" link.
+    actions:
+      - accept
+      - reject
+      - manage
+    cookies:
+      analytics: Google Analytics
+
 extra_javascript:
-  - https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.3/lottie.min.js
-  - javascripts/extra.js
+  - javascripts/analytics.js
 
 extra_css:
   - stylesheets/extra.css

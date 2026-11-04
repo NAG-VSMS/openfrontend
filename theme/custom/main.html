@@ -1,0 +1,66 @@
+{#
+  Site-wide overrides for Material for MkDocs.
+  - A richer <title> on the home page
+  - Open Graph / Twitter card metadata on every page
+  - Organization and WebSite structured data (the home page adds more in home.html)
+#}
+{% extends "base.html" %}
+
+{% set ofe_home_title = "Open Front End for Google Cloud Cluster Toolkit" %}
+{% set ofe_social_image = (config.site_url or "/") ~ "images/social-card.png" %}
+
+{% block htmltitle %}
+  {% if page.is_homepage %}
+    <title>{{ ofe_home_title }}</title>
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+  {% if page.is_homepage %}
+    {% set og_title = ofe_home_title %}
+  {% elif page.meta and page.meta.title %}
+    {% set og_title = page.meta.title ~ " - " ~ config.site_name %}
+  {% else %}
+    {% set og_title = (page.title | striptags) ~ " - " ~ config.site_name %}
+  {% endif %}
+  {% set og_description = (page.meta.description if page.meta and page.meta.description else config.site_description) | replace("\n", " ") | trim %}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ config.site_name }}">
+  <meta property="og:title" content="{{ og_title }}">
+  <meta property="og:description" content="{{ og_description }}">
+  {% if page.canonical_url %}<meta property="og:url" content="{{ page.canonical_url }}">{% endif %}
+  <meta property="og:image" content="{{ ofe_social_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Open Front End: HPC clusters on Google Cloud, from a web browser">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ og_title }}">
+  <meta name="twitter:description" content="{{ og_description }}">
+  <meta name="twitter:image" content="{{ ofe_social_image }}">
+  <meta name="theme-color" content="#4285F4">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "{{ config.site_url }}#website",
+        "url": "{{ config.site_url }}",
+        "name": "{{ config.site_name }}",
+        "description": {{ (config.site_description | replace("\n", " ") | trim) | tojson }},
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebPage",
+        "url": "{{ page.canonical_url }}",
+        "name": {{ og_title | tojson }},
+        "description": {{ og_description | tojson }},
+        "isPartOf": { "@id": "{{ config.site_url }}#website" },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
+{% endblock %}

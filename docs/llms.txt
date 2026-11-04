@@ -1,0 +1,32 @@
+# Open Front End
+
+> The Open Front End (OFE, also called the Cluster Toolkit FrontEnd or TKFE) is an open-source, Apache 2.0 web interface for the Google Cloud Cluster Toolkit (formerly the HPC Toolkit). It is a Django web application that runs on a single Compute Engine VM, the "service machine". Administrators use it to create and destroy Slurm HPC clusters, VPC networks and Filestore filesystems, install applications with Spack, and manage users. Users log in with Google, submit jobs to installed applications with input and output in Cloud Storage, compare runs with benchmarks, open a remote Linux desktop on the cluster in their browser, and open Vertex AI Workbench (JupyterLab) notebooks. The Front End generates Cluster Toolkit blueprints and runs Terraform for you, so no blueprint or Terraform authoring is needed.
+
+Key facts:
+
+- Source: https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/community/front-end/ofe (directory `community/front-end/ofe`)
+- Deploy: clone the Cluster Toolkit repository, `cd community/front-end/ofe`, run `./deploy.sh` from Linux, WSL or Cloud Shell with git, Terraform and the Google Cloud CLI installed. The script takes about 15 minutes; the service machine software stack takes up to 15 more. Unattended deployment: `./deploy.sh --config config.yaml`.
+- Requires a Google Cloud project with billing and a user who is project Owner or holds the roles listed in the Admin Guide; the script enables the needed APIs.
+- Clusters run Slurm on Rocky Linux 9 images from the Cluster Toolkit; cluster status moves through n (new), c (creating), i (initialising), r (ready), t (terminating), d (destroyed).
+- Applications: Spack packages (built as a Slurm job on a compute node), custom build scripts, or manually installed software registered with the Front End.
+- Users authenticate with Google OAuth2; administrators set per-user spend quotas.
+- Remote desktops: each cluster can offer per-user Linux desktops in the browser over noVNC, either on the login node (TigerVNC) or on a dedicated single-node visualisation partition that can carry a GPU (TurboVNC with VirtualGL). Users start and stop them from the cluster's Remote Desktops page; sessions run under the user's OS Login identity.
+- Support: GitHub issues on the Cluster Toolkit repository; NAG (https://www.nag.com) contributes to the project and offers deployment help.
+
+## Documentation
+
+- [Deploy with Cloud Shell tutorial](https://openfrontend.org/tutorials/deploy-with-cloud-shell/): a guided, step-by-step deployment from Google Cloud Shell, also runnable inside Cloud Shell with the teachme command; ends with a credential, a network, a filesystem, a ready cluster and teardown
+- [Admin Guide](https://openfrontend.org/admins/admin_guide/): prerequisites, deploy.sh, credentials, networks, filesystems, clusters, remote desktop options, users, teardown, troubleshooting
+- [Advanced Admin Guide](https://openfrontend.org/admins/advanced_admin_guide/): multi-project setups, service account creation, least-privilege roles and APIs
+- [Cluster Guide](https://openfrontend.org/admins/cluster_guide/): Pub/Sub command and control between the service machine and clusters
+- [Application Guide](https://openfrontend.org/admins/application_guide/): installing applications with Spack, custom scripts, or manual registration
+- [Workbench Admin Guide](https://openfrontend.org/admins/workbench_admin_guide/): Vertex AI Workbench configuration, presets, storage
+- [User Guide](https://openfrontend.org/users/user_guide/): logging in, clusters, applications, jobs, cloud storage, benchmarks, remote desktops
+- [Workbench User Guide](https://openfrontend.org/users/workbench_user_guide/): creating and using JupyterLab notebooks
+- [Developer Guide](https://openfrontend.org/developers/developer_guide/): architecture, service machine layout, run-time data, Django development
+
+## Related
+
+- [Cluster Toolkit documentation](https://cloud.google.com/cluster-toolkit/docs/overview)
+- [Cluster Toolkit repository](https://github.com/GoogleCloudPlatform/cluster-toolkit)
+- [Upstream OFE docs on GitHub](https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/community/front-end/ofe/docs)

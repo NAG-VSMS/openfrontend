@@ -1,3 +1,8 @@
+---
+description: >-
+  Multi-project deployments, creating service accounts by helper script, GCP Console or gcloud, and least-privilege roles and APIs for the Open Front End.
+---
+
 # Advanced Admin Guide
 
 This guide outlines some advanced features for deploying and maintaining the
@@ -34,11 +39,11 @@ is required.
 
 Service accounts can be created in a number of ways, as outlined below. In each
 case, the generated json credential is registered within the Open Front End
-in the same way, which is outlined in the [Admin Guide](../admin_guide/).
+in the same way, which is outlined in the [Admin Guide](admin_guide.md).
 
 ### Creating a Service Account via the Helper Script
 
-The helper script included in the HPC Toolkit repository can be used to create
+The helper script included in the Cluster Toolkit repository can be used to create
 a service account with the required basic roles/permissions when used by a user
 that has privileges within the project (e.g. *Owner*, or *Editor*). The
 roles/permissions could then be modified via `gcloud` or GCP Console (both
@@ -100,12 +105,23 @@ To create a service account with the basic required roles:
 
 ```bash
 gcloud iam service-accounts create <SERVICE_ACCOUNT_NAME>
-for roleid in file.editor \
+for roleid in aiplatform.admin \
               compute.admin \
-              iam.serviceAccountCreator \
-              iam.serviceAccountDelete \
+              storage.admin \
+              file.editor \
+              iam.serviceAccountAdmin \
+              iam.serviceAccountUser \
+              notebooks.admin \
               resourcemanager.projectIamAdmin \
-              notebooks.admin aiplatform.admin; do \
+              monitoring.viewer \
+              pubsub.admin \
+              cloudsql.admin \
+              bigquery.admin \
+              secretmanager.admin \
+              serviceusage.serviceUsageConsumer \
+              servicenetworking.networksAdmin \
+              artifactregistry.admin \
+              cloudbuild.builds.builder; do \
      gcloud projects add-iam-policy-binding <PROJECT_ID> \
       --member="serviceAccount:<SERVICE_ACCOUNT_NAME>@<PROJECT_ID>.iam.gserviceaccount.com" \
       --role="roles/$roleid"; \
@@ -238,3 +254,7 @@ service account created within it, as covered above), needs the following APIs:
  Cloud Billing API
  Vertex AI API
 ```
+
+---
+
+*This guide is adapted from [`AdvancedAdmin.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/AdvancedAdmin.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

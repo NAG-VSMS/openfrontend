@@ -1,3 +1,8 @@
+---
+description: >-
+  Run HPC jobs through the Open Front End: log in with Google, choose an application, submit jobs with Cloud Storage input and output, compare benchmarks, and open a remote desktop on the cluster.
+---
+
 # User Guide
 
 This guide is for standard users of the Open Front End, who can access HPC
@@ -8,7 +13,7 @@ prepare, submit and run jobs on the cluster through the Front End.
 
 An administrator should have arranged access to the system for a standard user:
 
-- A URL should be provided on which an instance of the HPC Toolkit Front End is
+- A URL should be provided on which an instance of the Cluster Toolkit Front End is
 deployed.
 - The Google identity of the user should be whitelisted to access the instance.
 - The user should be set as an authorised users on existing HPC clusters.
@@ -142,10 +147,35 @@ This JSON file should be in the following format:
 }
 ```
 
+## Remote Desktops
+
+Clusters can offer a Linux desktop that runs in your browser, which is
+convenient for visualisation, pre- and post-processing, or any graphical
+application. From the cluster's *Actions* menu, open *Remote Desktops* to see
+the desktop targets the administrator has enabled:
+
+- **Login node desktop**: a desktop session on the cluster's login node. It
+  shares the node with other users, so it suits lighter, 2D interactive work.
+- **Visualisation desktop**: a desktop on a dedicated node from its own Slurm
+  partition, which may carry a GPU for accelerated 3D rendering.
+
+Open a target and click *Start Desktop*. The desktop node is allocated if it
+is not already running, the page refreshes while the desktop service starts,
+and the desktop then appears in the page. Each session runs under your own
+Google and OS Login identity, so you see your home directory and the cluster's
+shared filesystems exactly as you would over SSH.
+
+*Stop Desktop* powers the node down and ends every session on it. For that
+reason only the user who started a desktop, or an administrator, can stop it.
+
 ## Vertex AI Workbenches
 
 Vertex AI Workbenches give the user a dedicated interactive environment to
 perform pre- or post-processing of data directly from the cluster, as
 Jupyter Notebooks.
 
-Please refer to the [Workbench User Guide](../workbench_user_guide).
+Please refer to the [Workbench User Guide](workbench_user_guide.md).
+
+---
+
+*This guide is adapted from [`user_guide.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/user_guide.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

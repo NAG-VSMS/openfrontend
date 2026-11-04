@@ -1,3 +1,8 @@
+---
+description: >-
+  Create, access and destroy Vertex AI Workbench JupyterLab notebooks from the Open Front End, with cluster storage mounted.
+---
+
 # Workbench User Guide
 
 Vertex AI Workbenches give the user a dedicated interactive environment to
@@ -36,8 +41,8 @@ User, Machine Type, Boot disk type, Boot Disk Capacity and image family.
 - Boot disk type: The type of disk storage used for the workbench boot disk.
 - Boot disk capacity: The amount of disk storage used for the workbench boot
   disk.
-- Image family: Currently the Open Front End supports Python3, Tensorflow,
-  PyTorch and R base images.
+- Image family: Currently the Open Front End supports Base Python3,
+  Tensorflow, PyTorch and R images.
 
 ## Add Storage
 
@@ -54,11 +59,11 @@ remember that these filesystems can only be mounted if they are operational at
 the time the workbench is started.
 
 Within the workbench there are methods for accessing GCP cloud storage (via the
-`gsutil` command) and `git`.
+`gcloud storage` command) and `git`.
 
 ## Access Workbench
 
-Once the workbench is is configured you will be presented with the details
+Once the workbench is configured you will be presented with the details
 page, which will contain a create link to start the workbench.
 
 ![workbench step 3](../images/create3.png)
@@ -87,7 +92,7 @@ on the workbench page.
 
 It is important to remember that all data stored on the workbench instance will
 be deleted unless it has been saved in another place such as a shared
-filesystem or transferred elsewhere in another way. Once the destory button is
+filesystem or transferred elsewhere in another way. Once the destroy button is
 clicked a confirmation page will be displayed.
 
 ![Destroy confirmation](../images/destroy_confirm.png)
@@ -101,3 +106,7 @@ Once the workbench is destroyed the workbench can either be deleted permanently
 or recreated if it is required again.
 
 ![Delete or recreate](../images/delete.png)
+
+---
+
+*This guide is adapted from [`WorkbenchUser.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/WorkbenchUser.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

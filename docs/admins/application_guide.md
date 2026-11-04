@@ -1,3 +1,8 @@
+---
+description: >-
+  Install HPC applications on Open Front End clusters with Spack, custom build scripts, or by registering software already on the shared filesystem.
+---
+
 # Application Installation Guide
 
 Administrators can install and manage applications in TKFE in the following
@@ -110,7 +115,7 @@ A typical workflow for installing a new Spack application is as follows:
 1. A successfully installed application will have its status updated to
   ‘ready’. A *New Job* button becomes available from the Actions menu on the
    application list page, or from the application detail page. The
-   [User Guide](../../../user_guide) contains additional information on how jobs can
+   [User Guide](../users/user_guide.md) contains additional information on how jobs can
    be prepared and submitted.
 
 ---
@@ -132,3 +137,7 @@ the compute nodes.
 
 Complex bugs should be reported to Spack. If an easy fix can be found, note
 the procedure. This can be then used in a custom installation.
+
+---
+
+*This guide is adapted from [`Applications.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/Applications.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

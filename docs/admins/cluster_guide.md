@@ -1,6 +1,11 @@
+---
+description: >-
+  How the Open Front End service machine and Slurm clusters communicate over Google Cloud Pub/Sub, including message types and IAM bindings.
+---
+
 # Command and Control of Clusters
 
-Previous incarnations of this Frontend relied on the frontend webserver instance being able to SSH directly to clusters in order to performance command and control (C2) operations. When clusters were created, an admin user was set that would accept a public ssh key for which the webserver owned the private key. This was largely straightfoward, and worked quite well. The clusters were also able to make HTTP API queries to the webserver.
+Previous incarnations of this Frontend relied on the frontend webserver instance being able to SSH directly to clusters in order to performance command and control (C2) operations. When clusters were created, an admin user was set that would accept a public ssh key for which the webserver owned the private key. This was largely straightforward, and worked quite well. The clusters were also able to make HTTP API queries to the webserver.
 
 This works well in the case where webserver and clusters all have public IP addresses, and are able to receive inbound requests, but it breaks down in the case where a user may wish to have the compute clusters not be directly exposed to the public internet.
 
@@ -42,7 +47,7 @@ Each command will have additional data in the Message Data, specific to that com
 * `SYNC` - Command to cluster to synchronize with the Frontend, including updating Log Files, and potentially other activities in the future (such as setting user permissions).
 * `SPACK_INSTALL` - Install a Spack package
 * `RUN_JOB` - Submit a job on behalf of a user to SLURM
-* `REGISTER_USER_GCS` - Begin the process to register a user's GCS credentials with `gsutil`.
+* `REGISTER_USER_GCS` - Begin the process to register a user's GCS credentials via an interactive `gcloud auth login` flow (credentials are shared with `gcloud storage`).
 
 ### Cluster C2 Daemon
 
@@ -52,7 +57,7 @@ During startup of a cluster, a Daemon is installed which creates a Streaming Pul
 
 The C2 topic is created at deployment time, as well as the subscription for the Frontend.  Topic creation permission is then no longer required by the Service Accounts of the Frontend or the Clusters.
 
-When a Cluster is created, a new Service Account is created for that Cluster.  This Service Account is then granted `pubsub.subscriber` permissions to the C2 Topic, and `pubsub.publisher` permissions to that cluster's own Subscription.  The Service Accounts for the clusters are created without any Google PubSub IAM permissions, so these policy bindings on the topic and subscription are the only PubSub IAM permissions granted to the cluster's service accounts.
+When a Cluster is created, a new Service Account is created for that Cluster.  This Service Account is granted `pubsub.publisher` permissions on the C2 Topic and `pubsub.subscriber` permissions on that cluster's own Subscription (in addition to the project-level roles defined in the cluster blueprint template, such as `pubsub.admin` and `resourcemanager.projectIamAdmin`).
 
 Sadly, the Frontend's Service Account must have either the role of `pubsub.admin` or a custom role, set at the project level.  This is because creating subscriptions and setting IAM Policy Bindings are actions done at the project level, rather than attached to the topic.
 
@@ -65,3 +70,7 @@ For example, if the Frontend is in GCP Project `Alpha`, the C2 Topic will also b
 Clusters automatically upload job logs to a GCS bucket, which is specified at cluster creation time.  The Cluster's Service Account is granted ObjectAdmin permissions in order to create and update Log files in the GCS bucket.
 
 The Frontend webserver displays log files from the GCS bucket.
+
+---
+
+*This guide is adapted from [`ClusterCommandControl.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/ClusterCommandControl.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*
