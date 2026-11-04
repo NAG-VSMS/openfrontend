@@ -8,7 +8,7 @@ prepare, submit and run jobs on the cluster through the Front End.
 
 An administrator should have arranged access to the system for a standard user:
 
-- A URL should be provided on which an instance of the HPC Toolkit Front End is
+- A URL should be provided on which an instance of the Cluster Toolkit Front End is
 deployed.
 - The Google identity of the user should be whitelisted to access the instance.
 - The user should be set as an authorised users on existing HPC clusters.
@@ -148,4 +148,8 @@ Vertex AI Workbenches give the user a dedicated interactive environment to
 perform pre- or post-processing of data directly from the cluster, as
 Jupyter Notebooks.
 
-Please refer to the [Workbench User Guide](../workbench_user_guide).
+Please refer to the [Workbench User Guide](workbench_user_guide.md).
+
+---
+
+*This guide is adapted from [`user_guide.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/user_guide.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*

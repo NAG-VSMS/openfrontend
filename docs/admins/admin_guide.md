@@ -5,7 +5,7 @@ administrator can deploy the Front End, manage the lifecycle of HPC clusters,
 set up networking and storage resources that support clusters, install
 applications, and manage user access.
 
-Basic administrator knowledge of the Google Cloud Plaform is needed in order to
+Basic administrator knowledge of the Google Cloud Platform is needed in order to
 create projects and user accounts, but all other low-level administration tasks
 are handled by the Open Front End.
 
@@ -14,7 +14,7 @@ default, a single Django superuser is created at deployment time - this
 superuser then has administrator privileges. For large organisations that need additional administrators, additional Django superusers can be created from the Admin site within the Front End, once it has been deployed.
 
 The Open Front End uses the
-[Google Cloud HPC Toolkit](https://github.com/GoogleCloudPlatform/hpc-toolkit) to
+[Google Cloud Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit) to
 provision resources for networks, filesystems and clusters using a service
 account that has its credentials registered to the Front End. The service
 account is also used for access management and billing.
@@ -34,30 +34,35 @@ all required parameters are specified properly in the configuration file before 
 
 #### Client Machine
 
-The client machine must run Linux and there are a small number of prerequisites
-that must be installed before the Open Front End can be deployed:
+The client machine must run Linux, or an equivalent such as
+[WSL](https://learn.microsoft.com/en-us/windows/wsl/install) on Windows or
+[Google Cloud Shell](https://cloud.google.com/shell). A small number of
+prerequisites must be installed before the Open Front End can be deployed:
 
+- bash shell
 - [Git](https://github.com/git-guides/install-git)
 - [Terraform CLI](https://www.terraform.io/downloads) installation
-- [Google Cloud CLI](https://cloud.google.com/cli) installation (`gcloud`
-  and `gsutil`)
+- [Google Cloud CLI](https://cloud.google.com/cli) installation (`gcloud`,
+  including the `gcloud storage` command)
   
-#### Download Google Cloud HPC Toolkit
+#### Download the Cluster Toolkit
 
-The Google Cloud HPC Toolkit repository needs to be cloned to the client
-machine then the working directory needs to be chnaged to the Open Front End
-(`ofe`) directory:
+The Open Front End lives in the
+[Cluster Toolkit](https://github.com/GoogleCloudPlatform/cluster-toolkit)
+repository (formerly the HPC Toolkit). Clone the repository to the client
+machine, then change the working directory to the Open Front End (`ofe`)
+directory:
 
 ```bash
-git clone https://github.com/GoogleCloudPlatform/hpc-toolkit.git
-cd hpc-toolkit/community/front-end/ofe
+git clone https://github.com/GoogleCloudPlatform/cluster-toolkit.git
+cd cluster-toolkit/community/front-end/ofe
 ```
 
 All further deployment actions must be performed from this directory.
 
 #### Google Cloud Platform
 
-Your organisation must already have access to the Google Cloud Plaform (GCP)
+Your organisation must already have access to the Google Cloud Platform (GCP)
 and be able to create projects and users. A project and a user account with
 enabled APIs and roles/permissions needs to be created. The user account must
 also be authenticated on the client machine to allow it to provision GCP
@@ -72,16 +77,24 @@ A GCP project is required with the following APIs enabled:
  Cloud Monitoring API
  Cloud Logging API
  Cloud Pub/Sub API
- Cloud Resource Manager
+ Cloud Resource Manager API
  Identity and Access Management (IAM) API
  Cloud OS Login API
  Cloud Filestore API
  Cloud Billing API
+ Cloud Storage API
+ Service Usage API
+ Service Networking API
+ Secret Manager API
+ Cloud SQL Admin API
+ BigQuery Connection API
  Vertex AI API
 ```
 
 If these are not enabled, the deployment script will ask to enable them for
-you.
+you. It is not possible to complete a deployment without these APIs, so the
+script will abort if you decline. The authoritative list is embedded in
+`deploy.sh`.
 
 ##### GCP User
 
@@ -103,7 +116,7 @@ required roles are:
 ```
 
 If required, an even stricter, or least-privilege custom role can be created.
-Details are given in the [Advanced Admin Guide](../advanced_admin_guide/#user-account).
+Details are given in the [Advanced Admin Guide](advanced_admin_guide.md#user-account).
 
 The user account must also be [authenticated to deploy GCP resources](https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login), which can be
 done with the following command:
@@ -146,7 +159,7 @@ prompts the Admin for required parameters.
    will create a service account, and generate a credential, associated with
    the GCP project specified earlier. This service account may not be needed if
    using an existing one, or using multiple projects (see the
-   [Advanced Admin Guide](../advanced_admin_guide/#multi-project-configuration)
+   [Advanced Admin Guide](advanced_admin_guide.md#multi-project-configuration)
    for details).
 8. If selected, a credential file, `credential.json`. will be created in the 
     directory that needs to be registered in the Open Front End (see below).
@@ -172,17 +185,26 @@ This is a more secure way of handling passwords.
 
 To use a configuration file for automated deployment, follow these steps:
 
-1. Create a file called config.yaml:
+1. Create a file called `config.yaml`. Do not put inline `#` comments on value
+   lines, as `deploy.sh` reads the values directly:
 ```yaml
 deployment_name: MyDeployment
 project_id: my-project-id
 zone: us-west1-a
-subnet_name: my-subnet # (optional)
-dns_hostname: myhostname.com # (optional)
-ip_address: 1.2.3.4 # (optional)
+# Optional fields: subnet_name, dns_hostname, ip_address,
+#                  deployment_mode, repo_fork, repo_branch
+subnet_name: my-subnet
+dns_hostname: myhostname.com
+ip_address: 1.2.3.4
 django_superuser_username: sysadm
-django_superuser_password: Passw0rd! # (optional if DJANGO_SUPERUSER_PASSWORD is passed)
+# Optional if DJANGO_SUPERUSER_PASSWORD is set in the environment
+django_superuser_password: Passw0rd!
 django_superuser_email: sysadmin@example.com
+# Optional: 'tarball' (default) uploads this local checkout to the service
+# machine; 'git' clones repo_fork/repo_branch from GitHub instead
+deployment_mode: git
+repo_fork: GoogleCloudPlatform
+repo_branch: develop
 ```
 2. Save the file in the same directory as the deploy.sh script.
 3. Open a terminal and navigate to the directory where the files are located.
@@ -213,7 +235,7 @@ needs to be copied into the *Credentials* form in the Open Front End.
 
 The deploy script will usually create a service account and credential (unless
 told not to), but other service accounts can be used (see the
-[Advanced Admin Guide](../advanced_admin_guide/#service-account-management)
+[Advanced Admin Guide](advanced_admin_guide.md#service-account-management)
 for details).
 
 <!--
@@ -277,7 +299,7 @@ be reachable by the VPC subnets intended to be used for clusters.
 
 An internal address can be used if the cluster shares the same VPC with the
 imported filesystem. Alternatively, system administrators can set up hybrid
-connectivity (such as extablishing network peering) beforing mounting the
+connectivity (such as establishing network peering) before mounting the
 external filesystem located elsewhere on GCP.
 
 ## Cluster Management
@@ -352,7 +374,7 @@ A typical workflow for creating a new cluster is as follows:
      as appropriate. Also, placement group can be enabled (for C2 and C2D
      partitions only). In the *image* field one can optionally supply a custom
      image to be used by the compute nodes. Administrators should ensure such
-     an image is compatible to the CentOS 7 based machine image used by Slurm
+     an image is compatible with the Rocky Linux 9 based Slurm machine images used by the Cluster Toolkit
      GCP. Otherwise additional customisation done by this system might fail.
 10. Finally, save the configurations and click the *Create* button to trigger
    the cluster creation.
@@ -440,15 +462,15 @@ be available to set the total spend available to the user.
 
 ## Application Management
 
-Please see the [Application Guide](../application_guide/).
+Please see the [Application Guide](application_guide.md).
 
 ## Workbench Management
 
-Please see the [Workbench Admin Guide](../workbench_admin_guide/).
+Please see the [Workbench Admin Guide](workbench_admin_guide.md).
 
 ## Teardown Process
 
-The HPC Toolkit repository contains a `teardown.sh` script that will destroy
+The Open Front End directory in the Cluster Toolkit repository contains a `teardown.sh` script that will destroy
 the running Open Front End instance. This script only removes the Open Front
 End, not resources started from it.
 
@@ -474,8 +496,8 @@ files will show errors from the Django web application.
 Cloud resource deployment log files (from Terraform) are typically shown via
 the Open Front End. If those logs are not being shown, they can be found on
 the service machine under
-`/opt/gcluster/hpc-toolkit/frontend/(clusters|fs|vpc)/`.
-HPC Toolkit log files will also be found in those directories. The Terraform
+`/opt/gcluster/cluster-toolkit/frontend/(clusters|fs|vpc)/`.
+Cluster Toolkit log files will also be found in those directories. The Terraform
 log files and status files will be down a few directories, based off of the
 Cluster Number, Deployment ID, and Terraform directory.
 
@@ -496,7 +518,7 @@ missing. Use the [IAM permissions reference](https://cloud.google.com/iam/docs/p
 to research this and identify additional roles to add to your user account.
 
 Before any attempt to redeploy the Open Front End, make sure to run
-`terraform destroy` in `hpc-toolkit/frontend/tf` to remove cloud resources that
+`terraform destroy` in `cluster-toolkit/frontend/tf` to remove cloud resources that
 have been already created.
 
 ### Cluster Problems
@@ -510,7 +532,7 @@ the Open Front End, which then needs updating.
 
 It's not possible to capture all such situations. Here, a list of tips is
 given to help debug cluster creation problems. The
-[Developer Guide](../../../developers/developer_guide/) contains a lot of details on how the
+[Developer Guide](../developers/developer_guide.md) contains a lot of details on how the
 back-end logic is handled, which can also help with certain issues.
 
 - If a cluster is stuck at status *c*, something is wrong with the provisioning
@@ -536,3 +558,7 @@ back-end logic is handled, which can also help with certain issues.
   failed clusters or network/filesystem components. This can be done from the
   Django Admin site, although Admins need to exercise caution while
   modifying the raw data in Django database.
+
+---
+
+*This guide is adapted from [`admin_guide.md`](https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/admin_guide.md) in the Cluster Toolkit repository. Last synced with upstream commit `d27dd72` (21 October 2026).*
