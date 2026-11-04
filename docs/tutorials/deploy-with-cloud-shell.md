@@ -252,4 +252,4 @@ Where next:
   Google login so your users can sign in.
 - [Advanced Admin Guide](../admins/advanced_admin_guide.md): deploy in one
   project and manage resources in others, or use least-privilege roles.
-- Need a hand with a production deployment? [Contact NAG](https://www.nag.com/contact-us).
+- Need a hand with a production deployment? [Contact NAG](https://nag.com/contact-us/).

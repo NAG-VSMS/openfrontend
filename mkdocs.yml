@@ -70,8 +70,7 @@ nav:
     - Developer Guide: developers/developer_guide.md
 
 extra:
-  # TODO: replace with the real NAG contact form URL
-  contact_url: https://www.nag.com/contact-us
+  contact_url: https://nag.com/contact-us/
   # "Open in Cloud Shell" link for the deployment tutorial. Point it at the
   # Cluster Toolkit repository once the tutorial is merged upstream, so it
   # opens in the user's regular (credentialed) Cloud Shell environment.
