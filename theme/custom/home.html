@@ -2,237 +2,363 @@
 {% block tabs %}
 {{ super() }}
 <style>
-    .md-main {
-        flex-grow: 0;
-        display: none;
-    }
+    /* ---- Home page only: hide the regular docs content area ---- */
+    .md-main { display: none; }
 
-    .md-main__inner {
-        display: flex;
-        height: 100%;
+    /* ---- Tokens (refined in the Material 3 pass) ---- */
+    .ofe-home {
+        --ofe-primary: var(--md-primary-fg-color);
+        --ofe-on-primary: #ffffff;
+        --ofe-surface: #ffffff;
+        --ofe-surface-alt: #f3f6fb;
+        --ofe-on-surface: #1d1b20;
+        --ofe-muted: #49454f;
+        --ofe-outline: #d8dde6;
+        --ofe-radius: 16px;
+        --ofe-max: 64rem;
+        color: var(--ofe-on-surface);
+        background: var(--ofe-surface);
+        font-size: .8rem; /* Material's html is 125%, so .8rem = 16px */
+        line-height: 1.55;
     }
+    .ofe-home a { color: var(--ofe-primary); }
+    .ofe-home h1, .ofe-home h2, .ofe-home h3 { margin: 0 0 .5rem; font-weight: 700; line-height: 1.2; }
+    .ofe-home h2 { font-size: 1.5rem; }
+    .ofe-home h3 { font-size: 1rem; }
+    .ofe-home p { margin: 0 0 1rem; }
+    .ofe-home code { font-family: var(--md-code-font-family); font-size: .9em; }
 
-    .tx-container {
-        overflow: auto;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        margin: 0;
-        padding-top: .0rem;
-        background: linear-gradient(to bottom, var(--md-primary-fg-color), hsla(160deg,47%,55%,1) 100%,#fff 100%);
-        width: 100vw;
-        height: 100vh;
-        background-size: cover;
-    }
+    .ofe-section { padding: 2.5rem 1rem; }
+    .ofe-section--alt { background: var(--ofe-surface-alt); }
+    .ofe-inner { max-width: var(--ofe-max); margin: 0 auto; }
+    .ofe-lead { font-size: .95rem; color: var(--ofe-muted); max-width: 44rem; }
 
-    .tx-hero {
-        margin: 3rem 2.8rem;
-        color: var(--md-primary-bg-color);
-        justify-content: center;
+    /* ---- Hero ---- */
+    .ofe-hero {
+        background: linear-gradient(160deg, var(--ofe-primary) 0%, hsl(160deg 47% 55%) 100%);
+        color: var(--ofe-on-primary);
+        padding: 3rem 1rem 3.5rem;
     }
+    .ofe-hero .ofe-inner { display: grid; gap: 2rem; align-items: center; }
+    .ofe-hero h1 { font-size: 1.8rem; color: inherit; }
+    .ofe-hero p { font-size: .95rem; max-width: 36rem; color: inherit; opacity: .95; }
+    .ofe-hero .ofe-kicker { font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; opacity: .9; margin-bottom: .75rem; }
+    .ofe-hero svg { width: 100%; height: auto; display: block; }
+    .ofe-chips { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.25rem; padding: 0; list-style: none; }
+    .ofe-chips li { font-size: .7rem; padding: .25rem .7rem; border: 1px solid rgba(255,255,255,.6); border-radius: 999px; }
 
-    .tx-hero h1 {
-        margin-bottom: 1rem;
-        color: currentColor;
-        font-weight: 700
+    /* ---- Buttons ---- */
+    .ofe-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .ofe-btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: .4rem;
+        min-height: 48px; padding: .6rem 1.4rem; border-radius: 999px;
+        font-weight: 600; text-decoration: none; border: 1px solid transparent;
+        transition: filter .15s ease, background .15s ease;
     }
+    .ofe-btn:hover, .ofe-btn:focus-visible { filter: brightness(1.08); }
+    .ofe-btn--filled { background: var(--ofe-on-primary); color: var(--ofe-primary) !important; }
+    .ofe-btn--outlined { border-color: currentColor; color: inherit !important; }
+    .ofe-btn--primary { background: var(--ofe-primary); color: var(--ofe-on-primary) !important; }
+    .ofe-btn--tonal { background: #dbe6fb; color: #0b3a8a !important; }
 
-    .tx-hero p {
-        margin-bottom: 1rem;
-        color: currentColor;
-        font-size:larger;
+    /* ---- Cards and grids ---- */
+    .ofe-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+    .ofe-grid > * { min-width: 0; } /* let pre/code shrink instead of overflowing */
+    .ofe-card {
+        background: var(--ofe-surface); border: 1px solid var(--ofe-outline);
+        border-radius: var(--ofe-radius); padding: 1.25rem; display: flex; flex-direction: column;
     }
+    .ofe-card p { color: var(--ofe-muted); flex: 1; }
+    .ofe-card .ofe-card__eyebrow { font-size: .65rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--ofe-primary); margin-bottom: .25rem; }
+    .ofe-card .ofe-card__link { font-weight: 600; text-decoration: none; }
+    .ofe-card .ofe-card__link::after { content: " \2192"; }
+    .ofe-feature { background: var(--ofe-surface); border-radius: var(--ofe-radius); padding: 1rem 1.1rem; border: 1px solid var(--ofe-outline); }
+    .ofe-feature h3 { font-size: .9rem; }
+    .ofe-feature p { margin: 0; color: var(--ofe-muted); font-size: .75rem; }
 
-    .tx-hero__content {
-        margin: 0 0 0 0;
+    /* ---- Steps ---- */
+    .ofe-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; counter-reset: step; }
+    .ofe-steps li { display: grid; grid-template-columns: 2.5rem 1fr; gap: .75rem; align-items: start; }
+    .ofe-steps li::before {
+        counter-increment: step; content: counter(step);
+        width: 2.5rem; height: 2.5rem; border-radius: 50%;
+        background: var(--ofe-primary); color: var(--ofe-on-primary);
+        display: inline-flex; align-items: center; justify-content: center; font-weight: 700;
     }
+    .ofe-steps h3 { margin-bottom: .2rem; }
+    .ofe-steps p { margin: 0; color: var(--ofe-muted); }
 
-    .tx-hero .hero-container {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        margin: 0 auto;
-        box-sizing: border-box;
-        padding-top: 0.5rem;
-        padding-bottom: 1rem;
+    /* ---- Code block ---- */
+    .ofe-code {
+        background: #1e1e2e; color: #e6e6f0; border-radius: var(--ofe-radius);
+        padding: 1rem 1.25rem; overflow-x: auto; font-family: var(--md-code-font-family);
+        font-size: .72rem; line-height: 1.6; margin: 0 0 1rem;
     }
+    .ofe-code .c { color: #8a8fa8; }
 
-    .tx-hero .hero-container-text {
-        flex: 0 0 40%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        margin: 0 auto;
-        padding: 0px;
-        box-sizing: border-box;
-    }
+    /* ---- Architecture figure ---- */
+    .ofe-figure { margin: 1.5rem 0 0; }
+    .ofe-figure img { width: 100%; height: auto; border-radius: var(--ofe-radius); background: #fff; border: 1px solid var(--ofe-outline); }
+    .ofe-figure figcaption { font-size: .72rem; color: var(--ofe-muted); margin-top: .5rem; }
 
-    .tx-hero #lottie-container {
-        flex: 0 0 60%;
-        margin: 0 auto;
+    /* ---- Contact / help ---- */
+    .ofe-help {
+        background: var(--ofe-primary); color: var(--ofe-on-primary);
+        border-radius: calc(var(--ofe-radius) * 1.5); padding: 2rem 1.5rem;
+        display: grid; gap: 1rem;
     }
+    .ofe-help h2, .ofe-help p { color: inherit; }
+    .ofe-help p { margin: 0; opacity: .95; }
 
-    .tx-hero .buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-top: 0.5rem;
-    }
+    /* ---- Footer links ---- */
+    .ofe-links { display: flex; flex-wrap: wrap; gap: 1.25rem; padding: 0; margin: 0; list-style: none; font-size: .75rem; }
+    .ofe-links a { text-decoration: none; }
 
-    .tx-hero .rounded-box {
-        border-radius: 10px;
-        background-color: var(--md-primary-fg-color);
-        color: var(--md-primary-bg-color);
-        width: 120px;
-        height: 40px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: flex-start;
+    /* ---- Larger screens ---- */
+    @media screen and (min-width: 48em) {
+        .ofe-section { padding: 3.5rem 1.5rem; }
+        .ofe-hero { padding: 4.5rem 1.5rem; }
+        .ofe-hero .ofe-inner { grid-template-columns: 3fr 2fr; }
+        .ofe-hero h1 { font-size: 2.3rem; }
+        .ofe-home h2 { font-size: 1.85rem; }
+        .ofe-grid--3 { grid-template-columns: repeat(3, 1fr); }
+        .ofe-grid--2 { grid-template-columns: repeat(2, 1fr); }
+        .ofe-help { grid-template-columns: 1fr auto; align-items: center; padding: 2.5rem; }
     }
-
-    .tx-hero .rounded-box p {
-        padding: 0;
-        font-weight: 400;
-        font-size: 0.8rem;
-    }
-
-    .tx-hero .md-button {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        margin-top: 0.5rem;
-        margin-right: .5rem;
-        color: var(--md-primary-fg-color);
-        padding-top: 3rem;
-        padding-bottom: 1.5rem;
-        border-radius: 10px;
-        border-width: 0px;
-        text-align: left;
-        white-space: normal;
-        height: 300px;
-        box-sizing: border-box;
-        justify-content: space-between;
-    }
-
-    .tx-hero .md-button--users {
-        background-color: var(--md-primary-bg-color);
-        border-color: var(--md-primary-bg-color);
-    }
-
-    .tx-hero .md-button--admins {
-        background-color: var(--md-primary-bg-color);
-        border-color: var(--md-primary-bg-color);
-    }
-
-    .tx-hero .md-button--developers {
-        background-color: var(--md-primary-bg-color);
-        border-color: var(--md-primary-bg-color);
-    }
-
-    .tx-hero .md-button:focus,
-    .tx-hero .md-button:hover {
-        background-color: var(--md-primary-fg-color);
-        border-color: var(--md-primary-bg-color);
-        color: var(--md-default-bg-color);
-    }
-
-    .tx-hero .md-button:focus .rounded-box,
-    .tx-hero .md-button:hover .rounded-box {
-        background-color: var(--md-primary-bg-color);
-        border-color: var(--md-primary-bg-color);
-        color: var(--md-primary-fg-color);
-    }
-
-    .tx-hero .md-button-sub-title {
-        font-weight: bold;
-        margin-bottom: 0;
-        font-size: 0.8rem;
-        display: block;
-    }
-
-    .tx-hero .md-button-title {
-        font-weight: bold;
-        margin-top: -0.3rem;
-        margin-bottom: 0;
-        font-size: 1.7rem;
-        display: block;
-    }
-
-    .tx-hero .md-button-description {
-        font-size: medium;
-        font-weight: 400;
-        margin-bottom: 0.5rem;
-        display: block;
-    }
-
-    @media screen and (max-width:30em) {
-        .tx-hero h1 {
-            font-size: 1.4rem
-        }
-    }
-
-    @media screen and (min-width:60em) {
-        .tx-hero__content {
-            max-width: 45rem;
-            margin-top: 1rem;
-            margin-left: 0.75rem;
-            align-items: center;
-        }
-    }
+    @media (prefers-reduced-motion: reduce) { .ofe-btn { transition: none; } }
 </style>
 
-<main class="tx-container">
-    <div class="md-grid md-typeset">
-      <div class="tx-hero">
-        <div class="tx-hero__content">
-            <h1>Open Front End</h1>
-            <div class="hero-container">
-                <div class="hero-container-text">
-                    <p>The Google Cloud Cluster Toolkit (formerly the HPC Toolkit) is an open-source project designed to simplify the deployment of High Performance Computing clusters on Google Cloud.</p>
-                    <p>With the Open Front End, users can enjoy a straightforward interface that harnesses the Cluster Toolkit's capabilities to effortlessly create custom HPC clusters, install necessary applications, and submit jobs with ease.</p>
-                </div>
-                <div id="lottie-container"></div>
-            </div>
-            <div class="buttons">
-                <a href="users/user_guide" class="md-button md-button--users">
-                    <div>
-                        <span class="md-button-sub-title"></span>
-                        <span class="md-button-title">Run</span>
-                        <span class="md-button-description">Begin exploring and using the capabilities of the Open Front End.</span>
-                    </div>
-                    <div class="rounded-box">
-                        <p>Learn more</p>
-                    </div>
-                </a>
-                <a href="admins/admin_guide" class="md-button md-button--admins">
-                    <div>
-                        <span class="md-button-sub-title"></span>
-                        <span class="md-button-title">Install</span>
-                        <span class="md-button-description">Explore deployment options for the Open Front End.</span>
-                    </div>
-                    <div class="rounded-box">
-                        <p>Learn more</p>
-                    </div>
-                </a>
-                <a href="developers/developer_guide" class="md-button md-button--developers">
-                    <div>
-                        <span class="md-button-sub-title"></span>
-                        <span class="md-button-title">Architecture</span>
-                        <span class="md-button-description">Discover how the Open Front End works.</span>
-                    </div>
-                    <div class="rounded-box">
-                        <p>Learn more</p>
-                    </div>
-                </a>
-            </div>
+{% set ofe_repo = "https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/community/front-end/ofe" %}
+{% set contact_url = config.extra.contact_url if config.extra and config.extra.contact_url else "#" %}
+
+<main class="ofe-home">
+
+  <!-- ======================= Hero ======================= -->
+  <section class="ofe-hero">
+    <div class="ofe-inner">
+      <div>
+        <div class="ofe-kicker">For Google Cloud Cluster Toolkit</div>
+        <h1>Open Front End: HPC clusters on Google Cloud, from a web browser</h1>
+        <p>The Open Front End (OFE) is a web interface for the Google Cloud Cluster Toolkit, formerly the HPC Toolkit. Administrators create Slurm clusters, networks and storage from a browser. Users install applications and submit jobs without writing Terraform or blueprints.</p>
+        <ul class="ofe-chips">
+          <li>Open source, Apache 2.0</li>
+          <li>Part of the Cluster Toolkit repository</li>
+          <li>Slurm, Spack and Vertex AI Workbench</li>
+        </ul>
+        <div class="ofe-actions">
+          <a class="ofe-btn ofe-btn--filled" href="admins/admin_guide/">Deploy the Front End</a>
+          <a class="ofe-btn ofe-btn--outlined" href="{{ ofe_repo }}">View on GitHub</a>
+        </div>
+      </div>
+      <!-- Mechanism sketch: browser -> OFE -> Cluster Toolkit -> Slurm cluster -->
+      <svg viewBox="0 0 320 300" role="img" aria-labelledby="ofe-hero-svg-title" xmlns="http://www.w3.org/2000/svg">
+        <title id="ofe-hero-svg-title">The Open Front End sits between your browser and the Cluster Toolkit, which builds Slurm clusters on Google Cloud</title>
+        <defs>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0L10 5L0 10z" fill="#fff" opacity=".9"/>
+          </marker>
+        </defs>
+        <g fill="none" stroke="#fff" stroke-width="2" opacity=".9">
+          <path d="M160 58v26" marker-end="url(#arr)"/>
+          <path d="M160 128v26" marker-end="url(#arr)"/>
+          <path d="M160 198v26" marker-end="url(#arr)"/>
+        </g>
+        <!-- browser -->
+        <g>
+          <rect x="70" y="14" width="180" height="44" rx="10" fill="#fff" opacity=".18" stroke="#fff" stroke-opacity=".7"/>
+          <circle cx="86" cy="26" r="3" fill="#fff"/><circle cx="96" cy="26" r="3" fill="#fff"/><circle cx="106" cy="26" r="3" fill="#fff"/>
+          <text x="160" y="44" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Your browser</text>
+        </g>
+        <!-- OFE -->
+        <g>
+          <rect x="40" y="84" width="240" height="44" rx="10" fill="#fff"/>
+          <text x="160" y="105" text-anchor="middle" fill="#1d1b20" font-size="13" font-weight="700">Open Front End</text>
+          <text x="160" y="120" text-anchor="middle" fill="#49454f" font-size="10">Django web app on one service VM</text>
+        </g>
+        <!-- Toolkit -->
+        <g>
+          <rect x="40" y="154" width="240" height="44" rx="10" fill="#fff" opacity=".18" stroke="#fff" stroke-opacity=".7"/>
+          <text x="160" y="175" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Cluster Toolkit + Terraform</text>
+          <text x="160" y="190" text-anchor="middle" fill="#fff" font-size="10" opacity=".9">generated blueprint, applied for you</text>
+        </g>
+        <!-- cluster -->
+        <g>
+          <rect x="40" y="224" width="240" height="62" rx="10" fill="#fff" opacity=".18" stroke="#fff" stroke-opacity=".7"/>
+          <text x="160" y="246" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Slurm cluster on Google Cloud</text>
+          <g fill="#fff" opacity=".85">
+            <rect x="70" y="256" width="36" height="18" rx="4"/><rect x="112" y="256" width="36" height="18" rx="4"/>
+            <rect x="154" y="256" width="36" height="18" rx="4"/><rect x="196" y="256" width="36" height="18" rx="4"/>
+          </g>
+          <text x="160" y="269" text-anchor="middle" fill="#1d1b20" font-size="9" font-weight="600">controller · login · compute partitions</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ======================= Audiences ======================= -->
+  <section class="ofe-section">
+    <div class="ofe-inner">
+      <h2>Pick your guide</h2>
+      <p class="ofe-lead">The documentation is split by role. Most people start with one of these three.</p>
+      <div class="ofe-grid ofe-grid--3">
+        <a class="ofe-card" href="users/user_guide/">
+          <span class="ofe-card__eyebrow">Users</span>
+          <h3>Run jobs</h3>
+          <p>Log in with Google, pick an installed application, submit a job with input from Cloud Storage, and compare runs with benchmarks.</p>
+          <span class="ofe-card__link">User Guide</span>
+        </a>
+        <a class="ofe-card" href="admins/admin_guide/">
+          <span class="ofe-card__eyebrow">Administrators</span>
+          <h3>Deploy and manage</h3>
+          <p>Deploy the Front End with one script, register a service account, then create networks, filesystems, clusters and applications.</p>
+          <span class="ofe-card__link">Admin Guide</span>
+        </a>
+        <a class="ofe-card" href="developers/developer_guide/">
+          <span class="ofe-card__eyebrow">Developers</span>
+          <h3>Understand the architecture</h3>
+          <p>How Django, Terraform, Pub/Sub and the Cluster Toolkit fit together, where run-time data lives, and how to extend the code.</p>
+          <span class="ofe-card__link">Developer Guide</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= How it works ======================= -->
+  <section class="ofe-section ofe-section--alt" id="how-it-works">
+    <div class="ofe-inner">
+      <h2>How it works</h2>
+      <p class="ofe-lead">The Front End runs on a single Compute Engine VM, the service machine. Everything below happens from its web interface once it is deployed.</p>
+      <ol class="ofe-steps">
+        <li>
+          <div>
+            <h3>Deploy the service machine</h3>
+            <p>Run <code>deploy.sh</code> from a Linux, WSL or Cloud Shell client. Terraform creates the VM, a Cloud Storage bucket and a Pub/Sub topic, and installs Django, nginx and the Cluster Toolkit. The script finishes in about 15 minutes, then the software stack takes up to 15 more to come up.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Register a credential and build the foundations</h3>
+            <p>Paste a service account key into the Credentials form. Create or import a VPC network and a Filestore filesystem. These have their own lifecycles and can be shared by several clusters.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Create a Slurm cluster</h3>
+            <p>Name it, pick a subnet and zone, choose partitions and machine types. The Front End generates a Cluster Toolkit blueprint and runs the toolkit and Terraform for you. The cluster moves through <code>creating</code> and <code>initialising</code> to <code>ready</code>, with logs visible in the browser.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Install applications and submit jobs</h3>
+            <p>Install applications through Spack, a custom build script, or by registering software already on the shared filesystem. Users then create jobs from an application page, pull input from a <code>gs://</code> bucket, and get logs and outputs back in the web interface.</p>
+          </div>
+        </li>
+      </ol>
+      <figure class="ofe-figure">
+        <img src="images/system-design.png" alt="Architecture diagram: client machines connect to the service machine, which talks to clusters over Pub/Sub and stores data in Cloud Storage. Each cluster has a Slurm controller, login node, shared filesystem and compute partitions." loading="lazy" width="1013" height="518">
+        <figcaption>The service machine communicates with each cluster over Pub/Sub. Clusters have a controller, one or more login nodes, a shared filesystem and one or more compute partitions.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================= Deploy ======================= -->
+  <section class="ofe-section" id="deploy">
+    <div class="ofe-inner">
+      <h2>What you need to deploy it</h2>
+      <div class="ofe-grid ofe-grid--2">
+        <div>
+          <h3>On Google Cloud</h3>
+          <p>A project with billing enabled and a user account that is a project <strong>Owner</strong>, or holds the smaller set of roles listed in the Admin Guide. The deploy script offers to enable the APIs it needs.</p>
+          <h3>On your client machine</h3>
+          <p>Linux, WSL or Cloud Shell with <code>git</code>, the Terraform CLI and the Google Cloud CLI installed, authenticated with <code>gcloud auth application-default login</code>.</p>
+        </div>
+        <div>
+          <h3>Then three commands</h3>
+<pre class="ofe-code"><span class="c"># The Front End lives inside the Cluster Toolkit repository</span>
+git clone https://github.com/GoogleCloudPlatform/cluster-toolkit.git
+cd cluster-toolkit/community/front-end/ofe
+./deploy.sh</pre>
+          <p>The script prompts for a deployment name, project, zone, optional DNS name and static IP, and an admin login. For unattended deployments, pass a YAML file with <code>./deploy.sh --config config.yaml</code>.</p>
+          <div class="ofe-actions">
+            <a class="ofe-btn ofe-btn--primary" href="admins/admin_guide/#open-front-end-deployment">Full deployment guide</a>
+            <a class="ofe-btn ofe-btn--tonal" href="admins/advanced_admin_guide/">Advanced: multi-project, custom roles</a>
+          </div>
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ======================= Example ======================= -->
+  <section class="ofe-section ofe-section--alt" id="example">
+    <div class="ofe-inner">
+      <h2>Example: from an empty project to a finished job</h2>
+      <p class="ofe-lead">A typical first session after deployment, with links to the matching documentation.</p>
+      <div class="ofe-grid ofe-grid--3">
+        <div class="ofe-card">
+          <span class="ofe-card__eyebrow">Admin, 10 minutes</span>
+          <h3>Network and storage</h3>
+          <p>Under <em>Credentials</em>, paste the key the deploy script generated. Under <em>Networks</em>, create a VPC with one subnet in your region and apply cloud changes. Under <em>Filesystems</em>, create a Filestore instance in that subnet.</p>
+          <a class="ofe-card__link" href="admins/admin_guide/#network-management">Network and filesystem management</a>
+        </div>
+        <div class="ofe-card">
+          <span class="ofe-card__eyebrow">Admin, 15 to 20 minutes</span>
+          <h3>A cluster with two partitions</h3>
+          <p>Create a cluster, keep the default <code>c2-standard-60</code> partition and add a second one for GPU or larger nodes. Authorise your users. Click <em>Create</em> and watch the status move to <em>ready</em>.</p>
+          <a class="ofe-card__link" href="admins/admin_guide/#cluster-management">Cluster management</a>
+        </div>
+        <div class="ofe-card">
+          <span class="ofe-card__eyebrow">Admin then user</span>
+          <h3>Install GROMACS, run a job</h3>
+          <p>Under <em>Applications</em>, add a Spack application with spec <code>gromacs</code> and install it on a compute partition. A user then opens the application, clicks <em>New Job</em>, points the run script at an input set in a <code>gs://</code> bucket and submits.</p>
+          <a class="ofe-card__link" href="admins/application_guide/#install-a-spack-application">Spack installs</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Features ======================= -->
+  <section class="ofe-section" id="features">
+    <div class="ofe-inner">
+      <h2>What is included</h2>
+      <div class="ofe-grid ofe-grid--3">
+        <div class="ofe-feature"><h3>Slurm clusters</h3><p>Controller, login nodes and partitions of any supported machine type, created and destroyed from the browser.</p></div>
+        <div class="ofe-feature"><h3>Spack application installs</h3><p>Build from Spack recipes as a Slurm job on a compute node, or use custom scripts and manual registration.</p></div>
+        <div class="ofe-feature"><h3>Jobs with cloud storage I/O</h3><p>Input from HTTP or <code>gs://</code> URLs, output back to a bucket, logs uploaded on completion.</p></div>
+        <div class="ofe-feature"><h3>Benchmarks</h3><p>Group runs of the same application and dataset to compare instance types and build options.</p></div>
+        <div class="ofe-feature"><h3>Vertex AI Workbench</h3><p>JupyterLab notebooks with Python, TensorFlow, PyTorch or R images, mounted on cluster storage.</p></div>
+        <div class="ofe-feature"><h3>Google login and quotas</h3><p>Users sign in with Google via OAuth2. Admins set per-user spend quotas before jobs can be submitted.</p></div>
+        <div class="ofe-feature"><h3>Networks and filesystems</h3><p>Create VPCs and Filestore instances, or import existing ones, and share them across clusters.</p></div>
+        <div class="ofe-feature"><h3>Multi-project</h3><p>Deploy in one project and provision resources in others by registering separate service account credentials.</p></div>
+        <div class="ofe-feature"><h3>Open source</h3><p>Apache 2.0, developed in the Cluster Toolkit repository. Contributions welcome.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Help ======================= -->
+  <section class="ofe-section" id="help">
+    <div class="ofe-inner">
+      <div class="ofe-help">
+        <div>
+          <h2>Need help deploying or customising it?</h2>
+          <p>NAG's HPC engineers contribute to the Open Front End and help organisations deploy, customise and support it on Google Cloud. Tell us about your project and we will get back to you.</p>
+        </div>
+        <a class="ofe-btn ofe-btn--filled" href="{{ contact_url }}" data-ofe-event="contact_click">Contact NAG</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Links ======================= -->
+  <section class="ofe-section ofe-section--alt">
+    <div class="ofe-inner">
+      <ul class="ofe-links">
+        <li><a href="{{ ofe_repo }}">Source code on GitHub</a></li>
+        <li><a href="https://github.com/GoogleCloudPlatform/cluster-toolkit/issues">Report an issue</a></li>
+        <li><a href="https://cloud.google.com/cluster-toolkit/docs/overview">Cluster Toolkit documentation</a></li>
+        <li><a href="https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/LICENSE">Apache 2.0 licence</a></li>
+      </ul>
+    </div>
+  </section>
+
 </main>
 {% endblock %}
 {% block content %}{% endblock %}
