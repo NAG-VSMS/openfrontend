@@ -174,19 +174,54 @@ body, input, .md-typeset { font-family: var(--m3-font); }
 .md-typeset h5, .md-typeset h6 { font-size: var(--m3-title-sm); font-weight: 500; text-transform: none; letter-spacing: 0; }
 .md-typeset code, .md-typeset pre { font-family: var(--m3-font-mono); }
 
-/* ---------- 6. Top app bar (M3: surface tone, not brand colour) ---------- */
+/* ---------- 6. Top app bar (M3: page surface, elevation only on scroll) ---------- */
 .md-header {
-  background-color: var(--m3-surface-container);
+  background-color: var(--m3-surface);
   color: var(--m3-on-surface);
   box-shadow: none;
-  border-bottom: 1px solid var(--m3-outline-variant);
+  border-bottom: 0;
+  transition: box-shadow var(--m3-motion), background-color var(--m3-motion);
 }
-.md-header[data-md-state="shadow"], .md-header--shadow { box-shadow: 0 1px 2px rgba(var(--m3-shadow)); transition: box-shadow var(--m3-motion); }
-.md-header__button.md-logo svg, .md-header__button.md-logo img { fill: var(--m3-primary); color: var(--m3-primary); }
-.md-header__title { font-size: var(--m3-title-lg); font-weight: 500; }
+.md-header--shadow { background-color: var(--m3-surface-container); box-shadow: 0 1px 2px rgba(var(--m3-shadow)), 0 2px 6px 2px rgba(0 0 0 / .06); }
+.md-header__inner { height: 3.2rem; }
+.md-header__button.md-logo { padding: .4rem .4rem .4rem .6rem; margin: 0; color: var(--m3-primary); align-items: center; }
+@media screen and (min-width: 76.25em) { .md-header__button.md-logo { display: inline-flex; } }
+.md-header__button.md-logo .ofe-mark { width: 1.4rem; height: 1.4rem; display: block; }
+.md-header__button.md-logo:hover { opacity: 1; filter: brightness(1.15); }
+.md-header__title { font-size: var(--m3-title-lg); font-weight: 500; margin-left: 0; }
+.md-header__title .md-header__ellipsis { letter-spacing: -.01em; }
 .md-header__button { color: var(--m3-on-surface-variant); }
-.md-header__source { color: var(--m3-on-surface-variant); }
-.md-header__source .md-source__icon svg { fill: currentColor; }
+/* Repository link: icon + "GitHub", no star/fork counts */
+.md-header__source { width: auto; max-width: none; margin-left: .6rem; color: var(--m3-on-surface-variant); }
+.md-source { font-size: var(--m3-label-lg); font-weight: 500; }
+.md-source__icon svg { fill: currentColor; }
+.md-source__facts { display: none; }
+.md-source__repository { margin-left: 0; }
+.md-source:hover { color: var(--m3-primary); opacity: 1; }
+
+/* ---------- 6b. Navigation tabs (M3 primary tabs) ---------- */
+.md-tabs {
+  background-color: var(--m3-surface);
+  color: var(--m3-on-surface-variant);
+  border-bottom: 1px solid var(--m3-outline-variant);
+  transition: background-color var(--m3-motion);
+}
+.md-header--shadow + .md-tabs, .md-tabs--active { background-color: var(--m3-surface-container); }
+.md-tabs__list { margin-left: .2rem; }
+.md-tabs__item { height: 2.4rem; padding: 0 .2rem; }
+.md-tabs__link {
+  position: relative; display: inline-flex; align-items: center; height: 100%;
+  margin-top: 0; padding: 0 .6rem; opacity: 1;
+  font-size: var(--m3-label-lg); font-weight: 500; color: var(--m3-on-surface-variant);
+  border-radius: var(--m3-shape-sm) var(--m3-shape-sm) 0 0;
+  transition: color var(--m3-motion-fast), background-color var(--m3-motion-fast);
+}
+.md-tabs__link:hover { color: var(--m3-on-surface); background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent); }
+.md-tabs__item--active .md-tabs__link, .md-tabs__item--active .md-tabs__link:hover { color: var(--m3-primary); }
+.md-tabs__item--active .md-tabs__link::after {
+  content: ""; position: absolute; left: .6rem; right: .6rem; bottom: 0;
+  height: 3px; border-radius: 3px 3px 0 0; background-color: var(--m3-primary);
+}
 
 /* Search as an M3 search bar */
 .md-search__form { background-color: var(--m3-surface-container-high); border-radius: var(--m3-shape-full); box-shadow: none; }
@@ -214,7 +249,8 @@ body, input, .md-typeset { font-family: var(--m3-font); }
 }
 .md-nav__item--section > .md-nav__link { padding-left: .7rem; }
 .md-nav--primary .md-nav__title[for="__drawer"] { background-color: var(--m3-surface-container); color: var(--m3-on-surface); }
-.md-nav--primary .md-nav__title .md-nav__button.md-logo svg { fill: var(--m3-primary); }
+.md-nav--primary .md-nav__title .md-nav__button.md-logo { color: var(--m3-primary); }
+.md-nav--primary .md-nav__title .md-nav__button.md-logo .ofe-mark { width: 1.6rem; height: 1.6rem; }
 .md-sidebar__scrollwrap { scrollbar-color: var(--m3-outline-variant) transparent; }
 /* Mobile drawer: a rounded M3 modal drawer */
 @media screen and (max-width: 76.1875em) {

@@ -6,7 +6,7 @@ site_description: >-
   applications with Spack, submit jobs and open remote desktops from a browser.
 site_author: NAG
 repo_url: https://github.com/GoogleCloudPlatform/cluster-toolkit
-repo_name: GoogleCloudPlatform/cluster-toolkit
+repo_name: GitHub
 edit_uri: ""
 
 theme:
@@ -33,6 +33,8 @@ theme:
     text: Roboto
     code: Roboto Mono
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
@@ -44,9 +46,9 @@ theme:
     - search.highlight
     - toc.follow
     - content.code.copy
+  favicon: images/favicon.svg
   icon:
     repo: fontawesome/brands/github
-    logo: material/lan
 
 plugins:
   - search
