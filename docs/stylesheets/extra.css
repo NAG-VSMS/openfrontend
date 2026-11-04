@@ -286,6 +286,32 @@ body, input, .md-typeset { font-family: var(--m3-font); }
 .md-nav--secondary .md-nav__link { padding: .25rem .6rem; }
 [dir="ltr"] .md-sidebar--secondary .md-nav__list { border-left: 1px solid var(--m3-outline-variant); }
 
+/* ---------- 9. Cloud Shell tutorial pages ----------
+   The tutorial markdown carries <walkthrough-*> directives that only render
+   inside Cloud Shell. On the site, show a small note in their place. */
+.md-typeset walkthrough-tutorial-duration,
+.md-typeset walkthrough-project-setup,
+.md-typeset walkthrough-enable-apis {
+  display: block;
+  padding: .6rem .9rem;
+  border: 1px dashed var(--m3-outline);
+  border-radius: var(--m3-shape-md);
+  background: var(--m3-surface-container-low);
+  color: var(--m3-on-surface-variant);
+  font-size: var(--m3-body-md);
+}
+.md-typeset walkthrough-tutorial-duration::before { content: "Estimated time: " attr(duration) " minutes."; }
+.md-typeset walkthrough-project-setup::before { content: "In Cloud Shell, a project picker appears here. Choose or create a project with billing enabled."; }
+.md-typeset walkthrough-enable-apis::before { content: "In Cloud Shell, an \"Enable APIs\" button appears here. Use the command below instead."; }
+.md-typeset walkthrough-footnote {
+  display: block;
+  margin: .8rem 0;
+  padding-left: .8rem;
+  border-left: 3px solid var(--m3-outline-variant);
+  color: var(--m3-on-surface-variant);
+  font-size: var(--m3-body-md);
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }

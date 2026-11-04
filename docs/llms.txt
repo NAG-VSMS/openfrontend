@@ -15,6 +15,7 @@ Key facts:
 
 ## Documentation
 
+- [Deploy with Cloud Shell tutorial](https://openfrontend.org/tutorials/deploy-with-cloud-shell/): a guided, step-by-step deployment from Google Cloud Shell, also runnable inside Cloud Shell with the teachme command; ends with a credential, a network, a filesystem, a ready cluster and teardown
 - [Admin Guide](https://openfrontend.org/admins/admin_guide/): prerequisites, deploy.sh, credentials, networks, filesystems, clusters, remote desktop options, users, teardown, troubleshooting
 - [Advanced Admin Guide](https://openfrontend.org/admins/advanced_admin_guide/): multi-project setups, service account creation, least-privilege roles and APIs
 - [Cluster Guide](https://openfrontend.org/admins/cluster_guide/): Pub/Sub command and control between the service machine and clusters

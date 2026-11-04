@@ -43,6 +43,7 @@ theme:
     - search.suggest
     - search.highlight
     - toc.follow
+    - content.code.copy
   icon:
     repo: fontawesome/brands/github
     logo: material/lan
@@ -52,6 +53,8 @@ plugins:
 
 nav:
   - Home: index.md
+  - Tutorials:
+    - Deploy with Cloud Shell: tutorials/deploy-with-cloud-shell.md
   - Users:
     - User Guide: users/user_guide.md
     - Workbench User Guide: users/workbench_user_guide.md
