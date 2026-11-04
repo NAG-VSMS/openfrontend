@@ -1,6 +1,6 @@
 ---
 description: >-
-  Run HPC jobs through the Open Front End: log in with Google, choose an application, submit jobs with Cloud Storage input and output, and compare benchmarks.
+  Run HPC jobs through the Open Front End: log in with Google, choose an application, submit jobs with Cloud Storage input and output, compare benchmarks, and open a remote desktop on the cluster.
 ---
 
 # User Guide
@@ -146,6 +146,27 @@ This JSON file should be in the following format:
   "result_value": "some value"
 }
 ```
+
+## Remote Desktops
+
+Clusters can offer a Linux desktop that runs in your browser, which is
+convenient for visualisation, pre- and post-processing, or any graphical
+application. From the cluster's *Actions* menu, open *Remote Desktops* to see
+the desktop targets the administrator has enabled:
+
+- **Login node desktop**: a desktop session on the cluster's login node. It
+  shares the node with other users, so it suits lighter, 2D interactive work.
+- **Visualisation desktop**: a desktop on a dedicated node from its own Slurm
+  partition, which may carry a GPU for accelerated 3D rendering.
+
+Open a target and click *Start Desktop*. The desktop node is allocated if it
+is not already running, the page refreshes while the desktop service starts,
+and the desktop then appears in the page. Each session runs under your own
+Google and OS Login identity, so you see your home directory and the cluster's
+shared filesystems exactly as you would over SSH.
+
+*Stop Desktop* powers the node down and ends every session on it. For that
+reason only the user who started a desktop, or an administrator, can stop it.
 
 ## Vertex AI Workbenches
 

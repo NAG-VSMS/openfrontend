@@ -14,6 +14,8 @@
    "The Cluster Toolkit is a command-line tool that turns YAML blueprints into Terraform. The Open Front End is a web layer on top of it, shipped in the same repository under community/front-end/ofe, that generates those blueprints from a form and tracks the clusters, applications and jobs it creates."),
   ("Can I use an existing VPC, subnet or filesystem?",
    "Yes. Existing VPCs and subnets in the project can be imported, and any filesystem that Linux can mount over the network can be registered. Filestore instances can also be created from the web interface."),
+  ("Can users get a graphical desktop on the cluster?",
+   "Yes. Each cluster can offer per-user remote desktops that open in the browser over noVNC: a desktop on the login node for general interactive work, and optionally a visualisation desktop on a dedicated single-node Slurm partition that can carry a GPU and uses TurboVNC with VirtualGL for accelerated OpenGL. Users start and stop desktops from the cluster's Remote Desktops page, and each session runs under the user's own OS Login account."),
   ("How do users log in, and how is spending controlled?",
    "Standard users sign in with their Google identity through OAuth2, which also gives them consistent Linux accounts on cluster nodes. Administrators authorise users per cluster and give each user a quota: disabled, unlimited, or a spend limit in US dollars."),
   ("Who maintains it and where do I get help?",
@@ -212,11 +214,11 @@
       <div>
         <div class="ofe-kicker">For Google Cloud Cluster Toolkit</div>
         <h1>Open Front End: HPC clusters on Google Cloud, from a web browser</h1>
-        <p>The Open Front End (OFE) is a web interface for the Google Cloud Cluster Toolkit, formerly the HPC Toolkit. Administrators create Slurm clusters, networks and storage from a browser. Users install applications and submit jobs without writing Terraform or blueprints.</p>
+        <p>The Open Front End (OFE) is a web interface for the Google Cloud Cluster Toolkit, formerly the HPC Toolkit. Administrators create Slurm clusters, networks and storage from a browser. Users run applications, submit jobs and open a Linux remote desktop on the cluster, all without writing Terraform or blueprints.</p>
         <ul class="ofe-chips">
           <li>Open source, Apache 2.0</li>
           <li>Part of the Cluster Toolkit repository</li>
-          <li>Slurm, Spack and Vertex AI Workbench</li>
+          <li>Slurm, Spack, remote desktops and Vertex AI Workbench</li>
         </ul>
         <div class="ofe-actions">
           <a class="ofe-btn ofe-btn--filled" href="admins/admin_guide/" data-ofe-event="deploy_cta_click">Deploy the Front End</a>
@@ -330,7 +332,7 @@
         <li>
           <div>
             <h3>Install applications and submit jobs</h3>
-            <p>Install applications through Spack, a custom build script, or by registering software already on the shared filesystem. Users then create jobs from an application page, pull input from a <code>gs://</code> bucket, and get logs and outputs back in the web interface.</p>
+            <p>Install applications through Spack, a custom build script, or by registering software already on the shared filesystem. Users then create jobs from an application page, pull input from a <code>gs://</code> bucket, and get logs and outputs back in the web interface. For interactive work they open a remote desktop on the cluster, straight from the browser.</p>
           </div>
         </li>
       </ol>
@@ -389,7 +391,7 @@ cd cluster-toolkit/community/front-end/ofe
         <div class="ofe-card">
           <span class="ofe-card__eyebrow">Admin then user</span>
           <h3>Install GROMACS, run a job</h3>
-          <p>Under <em>Applications</em>, add a Spack application with spec <code>gromacs</code> and install it on a compute partition. A user then opens the application, clicks <em>New Job</em>, points the run script at an input set in a <code>gs://</code> bucket and submits.</p>
+          <p>Under <em>Applications</em>, add a Spack application with spec <code>gromacs</code> and install it on a compute partition. A user then opens the application, clicks <em>New Job</em>, points the run script at an input set in a <code>gs://</code> bucket and submits. To inspect the results visually, they open the cluster's <em>Remote Desktops</em> page and start a desktop session.</p>
           <a class="ofe-card__link" href="admins/application_guide/#install-a-spack-application">Spack installs</a>
         </div>
       </div>
@@ -404,12 +406,12 @@ cd cluster-toolkit/community/front-end/ofe
         <div class="ofe-feature"><h3>Slurm clusters</h3><p>Controller, login nodes and partitions of any supported machine type, created and destroyed from the browser.</p></div>
         <div class="ofe-feature"><h3>Spack application installs</h3><p>Build from Spack recipes as a Slurm job on a compute node, or use custom scripts and manual registration.</p></div>
         <div class="ofe-feature"><h3>Jobs with cloud storage I/O</h3><p>Input from HTTP or <code>gs://</code> URLs, output back to a bucket, logs uploaded on completion.</p></div>
+        <div class="ofe-feature"><h3>Remote desktops in the browser</h3><p>Per-user Linux desktops over noVNC, on the login node or on a dedicated visualisation node with GPU acceleration. Opened from the cluster page, authenticated with the user's Google and OS Login identity.</p></div>
         <div class="ofe-feature"><h3>Benchmarks</h3><p>Group runs of the same application and dataset to compare instance types and build options.</p></div>
         <div class="ofe-feature"><h3>Vertex AI Workbench</h3><p>JupyterLab notebooks with Python, TensorFlow, PyTorch or R images, mounted on cluster storage.</p></div>
         <div class="ofe-feature"><h3>Google login and quotas</h3><p>Users sign in with Google via OAuth2. Admins set per-user spend quotas before jobs can be submitted.</p></div>
         <div class="ofe-feature"><h3>Networks and filesystems</h3><p>Create VPCs and Filestore instances, or import existing ones, and share them across clusters.</p></div>
         <div class="ofe-feature"><h3>Multi-project</h3><p>Deploy in one project and provision resources in others by registering separate service account credentials.</p></div>
-        <div class="ofe-feature"><h3>Open source</h3><p>Apache 2.0, developed in the Cluster Toolkit repository. Contributions welcome.</p></div>
       </div>
     </div>
   </section>

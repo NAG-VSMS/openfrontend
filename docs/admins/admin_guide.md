@@ -384,6 +384,33 @@ A typical workflow for creating a new cluster is as follows:
 10. Finally, save the configurations and click the *Create* button to trigger
    the cluster creation.
 
+### Remote Desktop Options
+
+When creating or editing a cluster, two optional desktop targets can be
+enabled. Both give users a Linux desktop in the browser over noVNC, with one
+session per user, authenticated through the Front End and the user's OS Login
+account.
+
+- **Login node desktop**: enables per-user desktop sessions on the cluster's
+  login node. Choose the VNC backend: *TigerVNC* (software rendering) is the
+  default.
+- **Visualisation desktop**: adds a separate desktop target backed by a
+  dedicated single-node Slurm partition. Options:
+    - *Partition mode*: one dynamic node allocated on demand when a user starts
+      the desktop, or one static node that is always provisioned.
+    - *Instance type* for the desktop host.
+    - *GPU type and count*, for example one `nvidia-l4`. GPU desktops require
+      the *TurboVNC* backend, which uses VirtualGL for accelerated OpenGL.
+    - *Placement*: cluster zone only, any zone in the region (lets Google Cloud
+      find GPU capacity, at the cost of cross-zone network charges), or an
+      existing Compute Engine reservation (guaranteed capacity, billed whether
+      or not the desktop is running).
+
+Users reach their desktops from the cluster's *Remote Desktops* page. Stopping
+a desktop powers its node down, so only the user who started it or an
+administrator can stop it. A desktop node that is allocated but idle still
+incurs cost, as does a static desktop node at all times.
+
 ### Destroying a Cluster
 
 To destroy a cluster, first find the list of clusters in the *Clusters* menu,
