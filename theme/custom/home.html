@@ -146,8 +146,8 @@
           <li>Slurm, Spack and Vertex AI Workbench</li>
         </ul>
         <div class="ofe-actions">
-          <a class="ofe-btn ofe-btn--filled" href="admins/admin_guide/">Deploy the Front End</a>
-          <a class="ofe-btn ofe-btn--outlined" href="{{ ofe_repo }}">View on GitHub</a>
+          <a class="ofe-btn ofe-btn--filled" href="admins/admin_guide/" data-ofe-event="deploy_cta_click">Deploy the Front End</a>
+          <a class="ofe-btn ofe-btn--outlined" href="{{ ofe_repo }}" data-ofe-event="github_click">View on GitHub</a>
         </div>
       </div>
       <!-- Mechanism sketch: browser -> OFE -> Cluster Toolkit -> Slurm cluster -->
@@ -351,10 +351,11 @@ cd cluster-toolkit/community/front-end/ofe
   <section class="ofe-section ofe-section--alt">
     <div class="ofe-inner">
       <ul class="ofe-links">
-        <li><a href="{{ ofe_repo }}">Source code on GitHub</a></li>
+        <li><a href="{{ ofe_repo }}" data-ofe-event="github_click">Source code on GitHub</a></li>
         <li><a href="https://github.com/GoogleCloudPlatform/cluster-toolkit/issues">Report an issue</a></li>
         <li><a href="https://cloud.google.com/cluster-toolkit/docs/overview">Cluster Toolkit documentation</a></li>
         <li><a href="https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/LICENSE">Apache 2.0 licence</a></li>
+        <li><a href="#__consent">Cookie settings</a></li>
       </ul>
     </div>
   </section>

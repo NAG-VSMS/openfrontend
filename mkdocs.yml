@@ -43,6 +43,26 @@ nav:
 extra:
   # TODO: replace with the real NAG contact form URL
   contact_url: https://www.nag.com/contact-us
+  analytics:
+    provider: google
+    # TODO: replace with the real GA4 measurement ID (Admin > Data streams)
+    property: G-XXXXXXXXXX
+  consent:
+    title: Cookie consent
+    description: >-
+      We use Google Analytics to see which pages are visited and whether the
+      documentation is useful, so we can improve it. Nothing is used for
+      advertising. You can change your choice at any time from the
+      "Cookie settings" link.
+    actions:
+      - accept
+      - reject
+      - manage
+    cookies:
+      analytics: Google Analytics
+
+extra_javascript:
+  - javascripts/analytics.js
 
 extra_css:
   - stylesheets/extra.css
