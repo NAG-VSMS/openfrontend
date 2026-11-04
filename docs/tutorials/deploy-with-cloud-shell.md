@@ -20,8 +20,16 @@ nodes bill while the cluster exists; compute nodes bill only while jobs run.
 The last step shows how to remove everything.
 
 **Reading this on openfrontend.org?** The widgets and buttons below only
-appear inside Cloud Shell. To run it there, open
-[Cloud Shell](https://shell.cloud.google.com/) and paste:
+appear inside Cloud Shell. Click the button to open Cloud Shell with this
+tutorial loaded in its side panel:
+
+[![Open in Cloud Shell](https://www.gstatic.com/cloudssh/images/open-btn.svg)](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/NAG-VSMS/openfrontend&cloudshell_git_branch=main&cloudshell_tutorial=docs/tutorials/deploy-with-cloud-shell.md&cloudshell_workspace=.&show=terminal)
+
+Cloud Shell will ask you to confirm cloning this repository. If it tells you
+the repository is not trusted and opens a *temporary* environment, prefer the
+manual route instead, so the deployment's Terraform state lands in your
+persistent home directory: open [Cloud Shell](https://shell.cloud.google.com/)
+and paste:
 
 ```bash
 git clone https://github.com/NAG-VSMS/openfrontend.git && teachme openfrontend/docs/tutorials/deploy-with-cloud-shell.md

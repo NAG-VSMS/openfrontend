@@ -120,6 +120,9 @@
     .ofe-btn--primary { background: var(--m3-primary); color: var(--m3-on-primary) !important; }
     .ofe-btn--tonal { background: var(--m3-secondary-container); color: var(--m3-on-secondary-container) !important; }
 
+    .ofe-cloudshell { display: inline-flex; align-items: center; min-height: 48px; }
+    .ofe-cloudshell img { display: block; height: 32px; width: auto; }
+
     /* ---- Cards and grids ---- */
     .ofe-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
     .ofe-grid > * { min-width: 0; } /* let pre/code shrink instead of overflowing */
@@ -364,6 +367,7 @@ cd cluster-toolkit/community/front-end/ofe
           <div class="ofe-actions">
             <a class="ofe-btn ofe-btn--primary" href="admins/admin_guide/#open-front-end-deployment">Full deployment guide</a>
             <a class="ofe-btn ofe-btn--tonal" href="tutorials/deploy-with-cloud-shell/" data-ofe-event="tutorial_click">Guided Cloud Shell tutorial</a>
+            {% if config.extra.cloudshell_tutorial_url %}<a class="ofe-cloudshell" href="{{ config.extra.cloudshell_tutorial_url }}" data-ofe-event="cloudshell_click" title="Open Cloud Shell with the deployment tutorial loaded"><img src="https://www.gstatic.com/cloudssh/images/open-btn.svg" alt="Open in Cloud Shell" width="196" height="32" loading="lazy"></a>{% endif %}
             <a class="ofe-btn ofe-btn--tonal" href="admins/advanced_admin_guide/">Advanced: multi-project, custom roles</a>
           </div>
         </div>
