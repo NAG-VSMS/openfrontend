@@ -1,7 +1,292 @@
-:root {
-    --md-primary-fg-color:        #4285F4;
-  }
+/* =========================================================================
+   Material 3 token layer for openfrontend.org
+   -------------------------------------------------------------------------
+   Material for MkDocs is Material Design 2 by construction. This sheet
+   defines Material 3 colour roles (seeded from Google blue #4285F4), shape,
+   type and elevation tokens, then maps them onto the theme's own CSS
+   variables and restyles its main components. Light and dark schemes are
+   both covered; the palette toggle in mkdocs.yml switches between them.
+   ========================================================================= */
 
-.md-footer-meta {
-    display: none;
+/* ---------- 1. Scheme-independent tokens ---------- */
+:root {
+  /* Shape scale */
+  --m3-shape-xs: 4px;
+  --m3-shape-sm: 8px;
+  --m3-shape-md: 12px;
+  --m3-shape-lg: 16px;
+  --m3-shape-xl: 28px;
+  --m3-shape-full: 9999px;
+
+  /* Type scale (Material's html font-size is 125%, so 1rem = 20px) */
+  --m3-font: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  --m3-font-mono: "Roboto Mono", SFMono-Regular, Menlo, monospace;
+  --m3-display-lg: 2.85rem;   /* 57px */
+  --m3-display-md: 2.25rem;   /* 45px */
+  --m3-display-sm: 1.8rem;    /* 36px */
+  --m3-headline-lg: 1.6rem;   /* 32px */
+  --m3-headline-md: 1.4rem;   /* 28px */
+  --m3-headline-sm: 1.2rem;   /* 24px */
+  --m3-title-lg: 1.1rem;      /* 22px */
+  --m3-title-md: .8rem;       /* 16px */
+  --m3-title-sm: .7rem;       /* 14px */
+  --m3-body-lg: .8rem;        /* 16px */
+  --m3-body-md: .7rem;        /* 14px */
+  --m3-body-sm: .6rem;        /* 12px */
+  --m3-label-lg: .7rem;       /* 14px */
+  --m3-label-md: .6rem;       /* 12px */
+
+  /* State layer opacities */
+  --m3-state-hover: .08;
+  --m3-state-focus: .12;
+  --m3-state-pressed: .12;
+
+  /* Motion */
+  --m3-motion-fast: 150ms cubic-bezier(.2, 0, 0, 1);
+  --m3-motion: 250ms cubic-bezier(.2, 0, 0, 1);
+}
+
+/* ---------- 2. Colour roles: light ---------- */
+[data-md-color-scheme="default"] {
+  --m3-primary: #005ac1;
+  --m3-on-primary: #ffffff;
+  --m3-primary-container: #d8e2ff;
+  --m3-on-primary-container: #001a41;
+  --m3-primary-bright: #4285f4;          /* seed, used for gradients only */
+  --m3-secondary: #575e71;
+  --m3-on-secondary: #ffffff;
+  --m3-secondary-container: #dbe2f9;
+  --m3-on-secondary-container: #141b2c;
+  --m3-tertiary: #006b5f;
+  --m3-on-tertiary: #ffffff;
+  --m3-tertiary-container: #74f8e5;
+  --m3-on-tertiary-container: #00201c;
+  --m3-error: #ba1a1a;
+  --m3-on-error: #ffffff;
+  --m3-error-container: #ffdad6;
+  --m3-on-error-container: #410002;
+  --m3-surface: #fefbff;
+  --m3-surface-dim: #dbd9e0;
+  --m3-surface-bright: #fefbff;
+  --m3-surface-container-lowest: #ffffff;
+  --m3-surface-container-low: #f3f3fa;
+  --m3-surface-container: #edeef4;
+  --m3-surface-container-high: #e7e8ee;
+  --m3-surface-container-highest: #e2e2e9;
+  --m3-on-surface: #1b1b1f;
+  --m3-on-surface-variant: #44474f;
+  --m3-outline: #74777f;
+  --m3-outline-variant: #c4c6d0;
+  --m3-inverse-surface: #303034;
+  --m3-inverse-on-surface: #f2f0f4;
+  --m3-inverse-primary: #adc6ff;
+  --m3-shadow: 0 0 0 / .3;
+  --m3-scrim: rgba(0, 0, 0, .32);
+  --m3-code-bg: var(--m3-surface-container-high);
+  --m3-code-fg: #1b1b1f;
+}
+
+/* ---------- 3. Colour roles: dark ---------- */
+[data-md-color-scheme="slate"] {
+  --m3-primary: #adc6ff;
+  --m3-on-primary: #002e69;
+  --m3-primary-container: #004494;
+  --m3-on-primary-container: #d8e2ff;
+  --m3-primary-bright: #4285f4;
+  --m3-secondary: #bfc6dc;
+  --m3-on-secondary: #293041;
+  --m3-secondary-container: #3f4759;
+  --m3-on-secondary-container: #dbe2f9;
+  --m3-tertiary: #53dbc9;
+  --m3-on-tertiary: #003731;
+  --m3-tertiary-container: #005047;
+  --m3-on-tertiary-container: #74f8e5;
+  --m3-error: #ffb4ab;
+  --m3-on-error: #690005;
+  --m3-error-container: #93000a;
+  --m3-on-error-container: #ffdad6;
+  --m3-surface: #131316;
+  --m3-surface-dim: #131316;
+  --m3-surface-bright: #39393c;
+  --m3-surface-container-lowest: #0e0e11;
+  --m3-surface-container-low: #1b1b1f;
+  --m3-surface-container: #1f1f23;
+  --m3-surface-container-high: #2a2a2d;
+  --m3-surface-container-highest: #353438;
+  --m3-on-surface: #e3e2e6;
+  --m3-on-surface-variant: #c4c6d0;
+  --m3-outline: #8e9099;
+  --m3-outline-variant: #44474f;
+  --m3-inverse-surface: #e3e2e6;
+  --m3-inverse-on-surface: #303034;
+  --m3-inverse-primary: #005ac1;
+  --m3-shadow: 0 0 0 / .5;
+  --m3-scrim: rgba(0, 0, 0, .5);
+  --m3-code-bg: var(--m3-surface-container-high);
+  --m3-code-fg: #e3e2e6;
+}
+
+/* ---------- 4. Map onto Material for MkDocs variables ---------- */
+[data-md-color-scheme="default"],
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: var(--m3-primary);
+  --md-primary-fg-color--light: var(--m3-primary-container);
+  --md-primary-fg-color--dark: var(--m3-on-primary-container);
+  --md-primary-bg-color: var(--m3-on-primary);
+  --md-primary-bg-color--light: var(--m3-on-primary);
+  --md-accent-fg-color: var(--m3-primary);
+  --md-accent-fg-color--transparent: color-mix(in srgb, var(--m3-primary) 12%, transparent);
+  --md-accent-bg-color: var(--m3-on-primary);
+  --md-default-bg-color: var(--m3-surface);
+  --md-default-fg-color: var(--m3-on-surface);
+  --md-default-fg-color--light: var(--m3-on-surface-variant);
+  --md-default-fg-color--lighter: color-mix(in srgb, var(--m3-on-surface) 45%, transparent);
+  --md-default-fg-color--lightest: color-mix(in srgb, var(--m3-on-surface) 10%, transparent);
+  --md-typeset-a-color: var(--m3-primary);
+  --md-code-bg-color: var(--m3-code-bg);
+  --md-code-fg-color: var(--m3-code-fg);
+  --md-code-hl-color: color-mix(in srgb, var(--m3-primary) 15%, transparent);
+  --md-footer-bg-color: var(--m3-surface-container);
+  --md-footer-bg-color--dark: var(--m3-surface-container-low);
+  --md-footer-fg-color: var(--m3-on-surface);
+  --md-footer-fg-color--light: var(--m3-on-surface-variant);
+  --md-footer-fg-color--lighter: var(--m3-outline);
+  --md-typeset-table-color: var(--m3-outline-variant);
+  --md-typeset-kbd-color: var(--m3-surface-container-highest);
+  --md-typeset-kbd-border-color: var(--m3-outline-variant);
+  --md-typeset-mark-color: var(--m3-tertiary-container);
+  --md-admonition-fg-color: var(--m3-on-surface);
+  --md-admonition-bg-color: var(--m3-surface-container-low);
+  --md-shadow-z1: 0 1px 2px rgba(var(--m3-shadow)), 0 1px 3px 1px rgba(0 0 0 / .08);
+  --md-shadow-z2: 0 1px 2px rgba(var(--m3-shadow)), 0 2px 6px 2px rgba(0 0 0 / .10);
+  --md-shadow-z3: 0 4px 8px 3px rgba(0 0 0 / .12), 0 1px 3px rgba(var(--m3-shadow));
+  color-scheme: light;
+}
+[data-md-color-scheme="slate"] { color-scheme: dark; }
+
+/* ---------- 5. Typography ---------- */
+body, input, .md-typeset { font-family: var(--m3-font); }
+.md-typeset { font-size: var(--m3-body-lg); line-height: 1.6; }
+.md-typeset h1 { font-size: var(--m3-headline-lg); font-weight: 400; letter-spacing: 0; color: var(--m3-on-surface); margin-bottom: 1rem; }
+.md-typeset h2 { font-size: var(--m3-headline-sm); font-weight: 400; letter-spacing: 0; margin: 2rem 0 .8rem; }
+.md-typeset h3 { font-size: var(--m3-title-lg); font-weight: 500; letter-spacing: 0; margin: 1.6rem 0 .6rem; }
+.md-typeset h4 { font-size: var(--m3-title-md); font-weight: 500; }
+.md-typeset h5, .md-typeset h6 { font-size: var(--m3-title-sm); font-weight: 500; text-transform: none; letter-spacing: 0; }
+.md-typeset code, .md-typeset pre { font-family: var(--m3-font-mono); }
+
+/* ---------- 6. Top app bar (M3: surface tone, not brand colour) ---------- */
+.md-header {
+  background-color: var(--m3-surface-container);
+  color: var(--m3-on-surface);
+  box-shadow: none;
+  border-bottom: 1px solid var(--m3-outline-variant);
+}
+.md-header[data-md-state="shadow"], .md-header--shadow { box-shadow: 0 1px 2px rgba(var(--m3-shadow)); transition: box-shadow var(--m3-motion); }
+.md-header__button.md-logo svg, .md-header__button.md-logo img { fill: var(--m3-primary); color: var(--m3-primary); }
+.md-header__title { font-size: var(--m3-title-lg); font-weight: 500; }
+.md-header__button { color: var(--m3-on-surface-variant); }
+.md-header__source { color: var(--m3-on-surface-variant); }
+.md-header__source .md-source__icon svg { fill: currentColor; }
+
+/* Search as an M3 search bar */
+.md-search__form { background-color: var(--m3-surface-container-high); border-radius: var(--m3-shape-full); box-shadow: none; }
+.md-search__form:hover { background-color: var(--m3-surface-container-highest); }
+.md-search__input { color: var(--m3-on-surface); }
+.md-search__input::placeholder, .md-search__icon { color: var(--m3-on-surface-variant); }
+[data-md-toggle="search"]:checked ~ .md-header .md-search__form { background-color: var(--m3-surface-container-lowest); border-radius: var(--m3-shape-xl) var(--m3-shape-xl) 0 0; }
+.md-search__output { border-radius: 0 0 var(--m3-shape-xl) var(--m3-shape-xl); box-shadow: var(--md-shadow-z3); }
+.md-search-result__meta { background-color: var(--m3-surface-container-low); color: var(--m3-on-surface-variant); }
+
+/* ---------- 7. Navigation drawer and rail (M3 pill indicators) ---------- */
+.md-nav { font-size: var(--m3-label-lg); }
+.md-nav__title { color: var(--m3-on-surface-variant); font-weight: 500; }
+.md-nav__item .md-nav__link {
+  border-radius: var(--m3-shape-full);
+  padding: .3rem .7rem;
+  margin: .1rem 0;
+  transition: background-color var(--m3-motion-fast), color var(--m3-motion-fast);
+}
+.md-nav__link:hover { background-color: color-mix(in srgb, var(--m3-on-surface) calc(var(--m3-state-hover) * 100%), transparent); color: var(--m3-on-surface); }
+.md-nav__link--active, .md-nav__link.md-nav__link--active:hover {
+  background-color: var(--m3-secondary-container);
+  color: var(--m3-on-secondary-container);
+  font-weight: 500;
+}
+.md-nav__item--section > .md-nav__link { padding-left: .7rem; }
+.md-nav--primary .md-nav__title[for="__drawer"] { background-color: var(--m3-surface-container); color: var(--m3-on-surface); }
+.md-nav--primary .md-nav__title .md-nav__button.md-logo svg { fill: var(--m3-primary); }
+.md-sidebar__scrollwrap { scrollbar-color: var(--m3-outline-variant) transparent; }
+/* Mobile drawer: a rounded M3 modal drawer */
+@media screen and (max-width: 76.1875em) {
+  .md-nav--primary .md-nav__title { background-color: var(--m3-surface-container-low); color: var(--m3-on-surface); }
+  .md-nav--primary .md-nav__title .md-nav__icon { color: var(--m3-on-surface); }
+  .md-nav--primary .md-nav__title[for="__drawer"] { background-color: var(--m3-surface-container-low); }
+  .md-sidebar--primary { border-radius: 0 var(--m3-shape-lg) var(--m3-shape-lg) 0; overflow: hidden; }
+  .md-nav__item .md-nav__link { min-height: 48px; display: flex; align-items: center; }
+}
+
+/* ---------- 8. Content components ---------- */
+.md-typeset pre > code { border-radius: var(--m3-shape-md); padding: .9rem 1rem; }
+.md-typeset .highlight > pre > code, .md-typeset pre { border-radius: var(--m3-shape-md); }
+.md-typeset code { border-radius: var(--m3-shape-xs); padding: .1em .35em; }
+.md-clipboard { color: var(--m3-on-surface-variant); }
+.md-typeset .admonition, .md-typeset details {
+  border: 1px solid var(--m3-outline-variant);
+  border-left-width: 1px;
+  border-radius: var(--m3-shape-md);
+  box-shadow: none;
+  background-color: var(--m3-surface-container-low);
+}
+.md-typeset .admonition-title, .md-typeset summary { border-radius: var(--m3-shape-md) var(--m3-shape-md) 0 0; }
+.md-typeset table:not([class]) { border-radius: var(--m3-shape-md); border: 1px solid var(--m3-outline-variant); box-shadow: none; overflow: hidden; }
+.md-typeset table:not([class]) th { background-color: var(--m3-surface-container); color: var(--m3-on-surface); font-weight: 500; }
+.md-typeset img { border-radius: var(--m3-shape-md); }
+.md-typeset hr { border-color: var(--m3-outline-variant); }
+.md-typeset blockquote { border-left-color: var(--m3-outline-variant); color: var(--m3-on-surface-variant); }
+
+/* M3 buttons: filled, tonal (default), outlined */
+.md-typeset .md-button {
+  border-radius: var(--m3-shape-full);
+  border: 1px solid transparent;
+  background-color: var(--m3-secondary-container);
+  color: var(--m3-on-secondary-container);
+  font-weight: 500;
+  font-size: var(--m3-label-lg);
+  padding: .5em 1.4em;
+  min-height: 40px;
+  transition: box-shadow var(--m3-motion-fast), filter var(--m3-motion-fast);
+}
+.md-typeset .md-button:hover, .md-typeset .md-button:focus-visible { background-color: var(--m3-secondary-container); color: var(--m3-on-secondary-container); box-shadow: var(--md-shadow-z1); filter: brightness(.97); }
+.md-typeset .md-button--primary { background-color: var(--m3-primary); color: var(--m3-on-primary); }
+.md-typeset .md-button--primary:hover, .md-typeset .md-button--primary:focus-visible { background-color: var(--m3-primary); color: var(--m3-on-primary); filter: brightness(1.08); }
+
+/* Footer: previous/next as surface container, meta hidden (kept from before) */
+.md-footer { background-color: var(--m3-surface-container); color: var(--m3-on-surface); }
+.md-footer__inner { padding: .8rem .2rem; }
+.md-footer__link { border-radius: var(--m3-shape-lg); transition: background-color var(--m3-motion-fast); }
+.md-footer__link:hover { background-color: color-mix(in srgb, var(--m3-on-surface) 8%, transparent); opacity: 1; }
+.md-footer__title, .md-footer__direction { color: var(--m3-on-surface-variant); }
+.md-footer-meta { display: none; }
+
+/* Back-to-top FAB, progress bar, consent dialog, tooltips */
+.md-top { background-color: var(--m3-primary-container); color: var(--m3-on-primary-container); border-radius: var(--m3-shape-lg); box-shadow: var(--md-shadow-z2); }
+.md-top:hover { background-color: var(--m3-primary); color: var(--m3-on-primary); }
+.md-progress { background-color: var(--m3-primary); }
+.md-consent__inner { background-color: var(--m3-surface-container-high); color: var(--m3-on-surface); border-radius: var(--m3-shape-xl) var(--m3-shape-xl) 0 0; box-shadow: var(--md-shadow-z3); }
+.md-consent__inner .md-typeset h4 { font-size: var(--m3-title-lg); font-weight: 500; }
+.md-consent__overlay { background-color: var(--m3-scrim); }
+.md-tooltip { border-radius: var(--m3-shape-sm); }
+.md-typeset .md-annotation__index { background-color: var(--m3-primary); }
+
+/* Focus rings */
+:focus-visible { outline: 2px solid var(--m3-primary); outline-offset: 2px; }
+
+/* Table of contents */
+.md-nav--secondary .md-nav__title { color: var(--m3-on-surface-variant); }
+.md-nav--secondary .md-nav__link { padding: .25rem .6rem; }
+[dir="ltr"] .md-sidebar--secondary .md-nav__list { border-left: 1px solid var(--m3-outline-variant); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0ms !important; animation-duration: 0ms !important; }
 }

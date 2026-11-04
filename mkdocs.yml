@@ -13,9 +13,24 @@ theme:
   name: material
   custom_dir: theme/custom
   palette:
-    primary: custom
+    # Material 3 colour roles live in docs/stylesheets/extra.css; "custom"
+    # tells the theme not to apply one of its own colour presets.
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   font:
-    text: Nunito
+    text: Roboto
     code: Roboto Mono
   features:
     - navigation.instant
