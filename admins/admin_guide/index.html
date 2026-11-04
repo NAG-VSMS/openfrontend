@@ -1,0 +1,2653 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Deploy the Open Front End for Google Cloud Cluster Toolkit, register a service account, and create networks, filesystems, Slurm clusters and users from the web interface.">
+      
+      
+        <meta name="author" content="NAG">
+      
+      
+        <link rel="canonical" href="https://openfrontend.org/admins/admin_guide/">
+      
+      
+        <link rel="prev" href="../../users/workbench_user_guide/">
+      
+      
+        <link rel="next" href="../advanced_admin_guide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+  
+    
+      
+        <title>Admin Guide - Open Front End</title>
+      
+    
+  
+
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+<script id="__analytics">function __md_analytics(){function e(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],e("js",new Date),e("config","G-EE9GP17131"),document.addEventListener("DOMContentLoaded",(function(){document.forms.search&&document.forms.search.query.addEventListener("blur",(function(){this.value&&e("event","search",{search_term:this.value})}));document$.subscribe((function(){var t=document.forms.feedback;if(void 0!==t)for(var a of t.querySelectorAll("[type=submit]"))a.addEventListener("click",(function(a){a.preventDefault();var n=document.location.pathname,d=this.getAttribute("data-md-value");e("event","feedback",{page:n,data:d}),t.firstElementChild.disabled=!0;var r=t.querySelector(".md-feedback__note [data-md-value='"+d+"']");r&&(r.hidden=!1)})),t.hidden=!1})),location$.subscribe((function(t){e("config","G-EE9GP17131",{page_path:t.pathname})}))}));var t=document.createElement("script");t.async=!0,t.src="https://www.googletagmanager.com/gtag/js?id=G-EE9GP17131",document.getElementById("__analytics").insertAdjacentElement("afterEnd",t)}</script>
+  
+    <script>if("undefined"!=typeof __md_analytics){var consent=__md_get("__consent");consent&&consent.analytics&&__md_analytics()}</script>
+  
+
+    
+    
+  
+    
+  
+  
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Open Front End">
+  <meta property="og:title" content="Admin Guide - Open Front End">
+  <meta property="og:description" content="Deploy the Open Front End for Google Cloud Cluster Toolkit, register a service account, and create networks, filesystems, Slurm clusters and users from the web interface.">
+  <meta property="og:url" content="https://openfrontend.org/admins/admin_guide/">
+  <meta property="og:image" content="https://openfrontend.org/images/social-card.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Open Front End: HPC clusters on Google Cloud, from a web browser">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Admin Guide - Open Front End">
+  <meta name="twitter:description" content="Deploy the Open Front End for Google Cloud Cluster Toolkit, register a service account, and create networks, filesystems, Slurm clusters and users from the web interface.">
+  <meta name="twitter:image" content="https://openfrontend.org/images/social-card.png">
+  <meta name="theme-color" content="#4285F4">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://openfrontend.org/#website",
+        "url": "https://openfrontend.org/",
+        "name": "Open Front End",
+        "description": "The Open Front End is an open-source web interface for the Google Cloud Cluster Toolkit (formerly HPC Toolkit). Deploy Slurm HPC clusters, install applications with Spack, submit jobs and open remote desktops from a browser.",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "WebPage",
+        "url": "https://openfrontend.org/admins/admin_guide/",
+        "name": "Admin Guide - Open Front End",
+        "description": "Deploy the Open Front End for Google Cloud Cluster Toolkit, register a service account, and create networks, filesystems, Slurm clusters and users from the web interface.",
+        "isPartOf": { "@id": "https://openfrontend.org/#website" },
+        "inLanguage": "en"
+      }
+    ]
+  }
+  </script>
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#admin-guide" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Open Front End" class="md-header__button md-logo" aria-label="Open Front End" data-md-component="logo">
+      
+<svg class="ofe-mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <rect x="2"  y="2"  width="12" height="12" rx="3" fill="currentColor"/>
+  <rect x="18" y="2"  width="12" height="12" rx="3" fill="currentColor" opacity=".55"/>
+  <rect x="2"  y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".55"/>
+  <rect x="18" y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".3"/>
+</svg>
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Open Front End
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Admin Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/GoogleCloudPlatform/cluster-toolkit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../tutorials/deploy-with-cloud-shell/" class="md-tabs__link">
+          
+  
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../users/user_guide/" class="md-tabs__link">
+          
+  
+  
+  Users
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+  Admins
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../developers/developer_guide/" class="md-tabs__link">
+          
+  
+  
+  Developers
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Open Front End" class="md-nav__button md-logo" aria-label="Open Front End" data-md-component="logo">
+      
+<svg class="ofe-mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <rect x="2"  y="2"  width="12" height="12" rx="3" fill="currentColor"/>
+  <rect x="18" y="2"  width="12" height="12" rx="3" fill="currentColor" opacity=".55"/>
+  <rect x="2"  y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".55"/>
+  <rect x="18" y="18" width="12" height="12" rx="3" fill="currentColor" opacity=".3"/>
+</svg>
+    </a>
+    Open Front End
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/GoogleCloudPlatform/cluster-toolkit" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tutorials
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Tutorials
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tutorials/deploy-with-cloud-shell/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Deploy with Cloud Shell
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Users
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Users
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../users/user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../users/workbench_user_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workbench User Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admins
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Admins
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin Guide
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Admin Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#open-front-end-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open Front End Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Open Front End Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-the-cluster-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download the Cluster Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#google-cloud-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google Cloud Platform
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Google Cloud Platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gcp-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GCP Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcp-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GCP User
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automated-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deployment-credential-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-deployment Credential Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-vpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New VPC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-an-existing-vpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import an Existing VPC
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filesystem-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filesystem Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filesystem Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New Filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-an-existing-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import an Existing Filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cluster-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-desktop-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Desktop Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#destroying-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Destroying a Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssh-access-to-the-service-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH Access to the Service Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-google-oauth2-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup Google OAuth2 Login
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup Google OAuth2 Login">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-allowed-users-by-email-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Allowed Users by Email Address
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note-on-external-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note on External Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-compute-quota" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Compute Quota
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workbench-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workbench Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teardown-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teardown Process
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#finding-log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding Log Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#general-clean-up-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Clean-up Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced_admin_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Admin Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cluster_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Cluster Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../application_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Application Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../workbench_admin_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Workbench Admin Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developers
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Developers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developers/developer_guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Developer Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#open-front-end-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Open Front End Deployment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Open Front End Deployment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Client Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#download-the-cluster-toolkit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Download the Cluster Toolkit
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#google-cloud-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Google Cloud Platform
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Google Cloud Platform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gcp-project" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GCP Project
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gcp-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GCP User
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Process
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Deployment Process">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manual-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Manual Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automated-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Automated Deployment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#post-deployment-credential-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Post-deployment Credential Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Network Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Network Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-vpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New VPC
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-an-existing-vpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import an Existing VPC
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filesystem-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filesystem Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Filesystem Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New Filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#import-an-existing-filesystem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import an Existing Filesystem
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cluster-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cluster Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cluster-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-new-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a New Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remote-desktop-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote Desktop Options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#destroying-a-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Destroying a Cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#user-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Management
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="User Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ssh-access-to-the-service-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH Access to the Service Machine
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-google-oauth2-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup Google OAuth2 Login
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup Google OAuth2 Login">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#set-allowed-users-by-email-address" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Set Allowed Users by Email Address
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#note-on-external-users" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Note on External Users
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-compute-quota" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        User Compute Quota
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#application-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workbench-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workbench Management
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teardown-process" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Teardown Process
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#finding-log-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Finding Log Files
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deployment-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Deployment Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cluster-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cluster Problems
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#general-clean-up-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        General Clean-up Tips
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Home
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="./" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Admins
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="admin-guide">Admin Guide</h1>
+<p>This guide is for administrators of the Open Front End. An
+administrator can deploy the Front End, manage the lifecycle of HPC clusters,
+set up networking and storage resources that support clusters, install
+applications, and manage user access.</p>
+<p>Basic administrator knowledge of the Google Cloud Platform is needed in order to
+create projects and user accounts, but all other low-level administration tasks
+are handled by the Open Front End.</p>
+<p>Open Front End is a web application built upon the Django framework. By
+default, a single Django superuser is created at deployment time - this
+superuser then has administrator privileges. For large organisations that need additional administrators, additional Django superusers can be created from the Admin site within the Front End, once it has been deployed.</p>
+<p>The Open Front End uses the
+<a href="https://github.com/GoogleCloudPlatform/cluster-toolkit">Google Cloud Cluster Toolkit</a> to
+provision resources for networks, filesystems and clusters using a service
+account that has its credentials registered to the Front End. The service
+account is also used for access management and billing.</p>
+<h2 id="open-front-end-deployment">Open Front End Deployment</h2>
+<p>The Open Front End is deployed from a client machine using a shell script. The script will guide the admin through the setup process, prompting for input of required parameters.</p>
+<p>The Front End can also be deployed using a configuration file specified with
+the <code>--config</code> option. In this case, the script will read the required
+parameters from the YAML file instead of prompting the user for input. This
+allows for an automated deployment process but it's important to ensure that
+all required parameters are specified properly in the configuration file before deploying.</p>
+<h3 id="prerequisites">Prerequisites</h3>
+<h4 id="client-machine">Client Machine</h4>
+<p>The client machine must run Linux, or an equivalent such as
+<a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL</a> on Windows or
+<a href="https://cloud.google.com/shell">Google Cloud Shell</a>. A small number of
+prerequisites must be installed before the Open Front End can be deployed:</p>
+<ul>
+<li>bash shell</li>
+<li><a href="https://github.com/git-guides/install-git">Git</a></li>
+<li><a href="https://www.terraform.io/downloads">Terraform CLI</a> installation</li>
+<li><a href="https://cloud.google.com/cli">Google Cloud CLI</a> installation (<code>gcloud</code>,
+  including the <code>gcloud storage</code> command)</li>
+</ul>
+<h4 id="download-the-cluster-toolkit">Download the Cluster Toolkit</h4>
+<p>The Open Front End lives in the
+<a href="https://github.com/GoogleCloudPlatform/cluster-toolkit">Cluster Toolkit</a>
+repository (formerly the HPC Toolkit). Clone the repository to the client
+machine, then change the working directory to the Open Front End (<code>ofe</code>)
+directory:</p>
+<pre><code class="language-bash">git clone https://github.com/GoogleCloudPlatform/cluster-toolkit.git
+cd cluster-toolkit/community/front-end/ofe
+</code></pre>
+<p>All further deployment actions must be performed from this directory.</p>
+<h4 id="google-cloud-platform">Google Cloud Platform</h4>
+<p>Your organisation must already have access to the Google Cloud Platform (GCP)
+and be able to create projects and users. A project and a user account with
+enabled APIs and roles/permissions needs to be created. The user account must
+also be authenticated on the client machine to allow it to provision GCP
+resources.</p>
+<h5 id="gcp-project">GCP Project</h5>
+<p>A GCP project is required with the following APIs enabled:</p>
+<pre><code class="language-Text"> Compute Engine API
+ Cloud Monitoring API
+ Cloud Logging API
+ Cloud Pub/Sub API
+ Cloud Resource Manager API
+ Identity and Access Management (IAM) API
+ Cloud OS Login API
+ Cloud Filestore API
+ Cloud Billing API
+ Cloud Storage API
+ Service Usage API
+ Service Networking API
+ Secret Manager API
+ Cloud SQL Admin API
+ BigQuery Connection API
+ Vertex AI API
+</code></pre>
+<p>If these are not enabled, the deployment script will ask to enable them for
+you. It is not possible to complete a deployment without these APIs, so the
+script will abort if you decline. The authoritative list is embedded in
+<code>deploy.sh</code>.</p>
+<h5 id="gcp-user">GCP User</h5>
+<p>A GCP user that is a member of the project will be able to deploy the Open 
+Front End, but must have appropriate privileges. A user that is an <em>Owner</em> of
+the project will automatically have all required roles and permissions.  Alternatively, another account with access to the project, but a limited set of roles can be used, which can help satisfy security concerns. The <code>gcloud</code>
+command can be used to <a href="https://cloud.google.com/sdk/gcloud/reference/auth/login">switch to another account</a>
+and apply IAM roles. IAM roles can also be applied via the GCP Console. The
+required roles are:</p>
+<pre><code class="language-Text"> Compute Admin
+ Storage Admin
+ Pub/Sub Admin
+ Create Service Accounts
+ Delete Service Accounts
+ Service Account User
+ Project IAM Admin
+</code></pre>
+<p>If required, an even stricter, or least-privilege custom role can be created.
+Details are given in the <a href="../advanced_admin_guide/#user-account">Advanced Admin Guide</a>.</p>
+<p>The user account must also be <a href="https://cloud.google.com/sdk/gcloud/reference/auth/application-default/login">authenticated to deploy GCP resources</a>, which can be
+done with the following command:</p>
+<pre><code class="language-bash">gcloud auth application-default login --project=&lt;PROJECT_ID&gt;
+</code></pre>
+<p>You will be prompted to open your web browser to authenticate. If further help
+is needed, please refer to the following GCP documentation:</p>
+<ul>
+<li><a href="https://cloud.google.com/resource-manager/docs/creating-managing-projects">Creating and managing projects</a></li>
+<li><a href="https://cloud.google.com/endpoints/docs/openapi/enable-api">Enabling APIs</a></li>
+<li><a href="https://cloud.google.com/iam/docs/creating-custom-roles">Granting and roles/permissions</a></li>
+</ul>
+<h3 id="deployment-process">Deployment Process</h3>
+<h4 id="manual-deployment">Manual Deployment</h4>
+<p>The Open Front End uses a deployment script run on the client machine and
+prompts the Admin for required parameters.</p>
+<ol>
+<li>Run <code>./deploy.sh</code></li>
+<li>Follow prompts to name the Open Front End VM instance, specify the GCP project,
+   zone and subnet (subnet is optional, and one will be created if required).
+   The hosting VM will be referred to as the <em>service machine</em> from now on.</li>
+<li>Follow prompts to enter domain name (DNS hostname) and IP address for the
+   service machine.</li>
+<li>For a production deployment, provide a domain name and static IP
+     address.  If a static IP is needed, follow the on-screen instructions. An
+     SSL certificate will automatically be obtained via
+     <a href="https://letsencrypt.org/">LetsEncrypt</a> to secure the web application.</li>
+<li>For dev and testing purposes, the domain name and static IP address and
+     domain name can be left blank. The system can still be successfully
+     deployed and run with an ephemeral IP address, however OAuth2-based login
+     (see later) will not be available as this requires a publicly resolvable
+     domain name.</li>
+<li>Follow instructions to provide details for an Admin (the Django superuser)
+   account - username, password, email address.</li>
+<li>Confirm whether to create a service account for managing clusters.  This
+   will create a service account, and generate a credential, associated with
+   the GCP project specified earlier. This service account may not be needed if
+   using an existing one, or using multiple projects (see the
+   <a href="../advanced_admin_guide/#multi-project-configuration">Advanced Admin Guide</a>
+   for details).</li>
+<li>If selected, a credential file, <code>credential.json</code>. will be created in the 
+    directory that needs to be registered in the Open Front End (see below).</li>
+<li>Confirm the parameters are correct when prompted and the deployment can
+   proceed.</li>
+<li>If confirmed, the VM instance will be created. <em>It will take up to 15
+    minutes to provision the full service machine software stack.</em></li>
+<li>Once deployed, it will be possible to log into the Open Front End using the
+   Admin account details given, at the specified domain name or IP address
+   (output as <code>server_ip</code>).</li>
+</ol>
+<h4 id="automated-deployment">Automated Deployment</h4>
+<p>The Open Front End can also be deployed automatically using a YAML configuration
+file with all the required parameters. To deploy using this option, run
+<code>./deploy.sh --config &lt;path-to-config-file&gt;</code>. All required parameters for 
+deployment must be specified in the YAML file. If any required parameter is 
+missing or invalid, the script will exit with an error and no resources will be
+created or modified.</p>
+<p>If the DJANGO_SUPERUSER_PASSWORD environment variable is set, it will be used
+to set the Django superuser password instead of the value in the YAML file.
+This is a more secure way of handling passwords.</p>
+<p>To use a configuration file for automated deployment, follow these steps:</p>
+<ol>
+<li>Create a file called <code>config.yaml</code>. Do not put inline <code>#</code> comments on value
+   lines, as <code>deploy.sh</code> reads the values directly:</li>
+</ol>
+<pre><code class="language-yaml">deployment_name: MyDeployment
+project_id: my-project-id
+zone: us-west1-a
+# Optional fields: subnet_name, dns_hostname, ip_address,
+#                  deployment_mode, repo_fork, repo_branch
+subnet_name: my-subnet
+dns_hostname: myhostname.com
+ip_address: 1.2.3.4
+django_superuser_username: sysadm
+# Optional if DJANGO_SUPERUSER_PASSWORD is set in the environment
+django_superuser_password: Passw0rd!
+django_superuser_email: sysadmin@example.com
+# Optional: 'tarball' (default) uploads this local checkout to the service
+# machine; 'git' clones repo_fork/repo_branch from GitHub instead
+deployment_mode: git
+repo_fork: GoogleCloudPlatform
+repo_branch: develop
+</code></pre>
+<ol start="2">
+<li>Save the file in the same directory as the deploy.sh script.</li>
+<li>Open a terminal and navigate to the directory where the files are located.</li>
+<li>Run <code>./deploy.sh --config config.yaml</code></li>
+<li>The script will read the parameters from the config file and proceed with
+   the deployment process. If DJANGO_SUPERUSER_PASSWORD environment variable is
+   set, the script will use it to set the Django superuser password instead of
+   the value in the YAML file.</li>
+<li>The VM instance will now be created. <em>It will take up to 15
+    minutes to provision the full service machine software stack.</em></li>
+<li>Once deployed, it will be possible to log into the Open Front End using the
+   Admin account details given, at the specified domain name or IP address
+   (output as <code>server_ip</code>).</li>
+</ol>
+<p><strong>Important: To ensure that the Open Front End resources can be fully cleaned
+up at a later date, ensure that the directory containing the terraform
+configuration (<code>./tf</code>) is retained.</strong></p>
+<h2 id="post-deployment-credential-management">Post-deployment Credential Management</h2>
+<p>To allow the Open Front End to manage cloud resources on behalf of users, a
+<a href="https://cloud.google.com/iam/docs/service-accounts">service account</a>
+must be registered by the Admin. This is done by entering a credential
+corresponding to the service account - the credential will be a json file that
+needs to be copied into the <em>Credentials</em> form in the Open Front End.</p>
+<p>The deploy script will usually create a service account and credential (unless
+told not to), but other service accounts can be used (see the
+<a href="../advanced_admin_guide/#service-account-management">Advanced Admin Guide</a>
+for details).</p>
+<!--
+The supplied credential will be validated and stored in the database for
+future use.
+
+Typically, the Owner or Editor of a GCP project have enough permissions. For
+other users with custom roles, if certain permissions are missing, GCP will
+typically return clear error messages.
+
+For this project, the following roles should be sufficient for the admin users to manage the required service account: *Service Account User*, *Service Account Admin*, and *Service Account Key Admin*.
+-->
+
+<h2 id="network-management">Network Management</h2>
+<p>All cloud systems begin with defining the network that components will
+exist in. Before a cluster or stand-alone filesystem can be created, the
+Admin must create the virtual private cloud (VPC) network. This is
+accomplished under the <em>Networks</em> tab. Note that network resources
+have their own life cycles and are managed independently.</p>
+<h3 id="create-a-new-vpc">Create a New VPC</h3>
+<p>To create a new network, the Admin must first select which credential should be
+used for this network, give the VPC a name then select the cloud region for the
+network.</p>
+<p>Upon clicking the <em>Save</em> button, the network is not immediately created. The
+Admin has to click <em>Edit Subnet</em> to create at least one subnet in the VPC.
+Once the network and subnet(s) are defined, click the <em>Apply Cloud Changes</em>
+button to trigger creation of the VPC and subnet(s).</p>
+<h3 id="import-an-existing-vpc">Import an Existing VPC</h3>
+<p>If your organisation already has predefined VPCs within the hosting GCP
+project, they can be imported. Simply select an existing VPC and associated
+subnets from the web interface to register them with the Open Front End.
+Imported VPCs can be used in exactly the same way as newly created ones.</p>
+<h2 id="filesystem-management">Filesystem Management</h2>
+<p>By default each cluster creates two shared filesystems: one at <code>/opt/cluster</code> to
+hold installed applications, and another at <code>/home</code> to hold job files for individual
+users. Both filesystems can be customised if required and additional ones
+can be created and mounted to the clusters. Note that filesystem resources have
+their own lifecycles and are managed independently, so they persist until
+explicitly deleted, and can be attached to several clusters in the same subnet.</p>
+<h3 id="create-a-new-filesystem">Create a New Filesystem</h3>
+<p>Currently, only GCP Filestore is supported. A GCP Filestore can be created from
+the <em>Filesystems</em> tab. A new Filestore has to be associated with an
+existing VPC and placed in a cloud zone. All performance tiers are supported.</p>
+<h3 id="import-an-existing-filesystem">Import an Existing Filesystem</h3>
+<p>Existing filesystems can be registered to this system and subsequently mounted
+by clusters. These can be existing NFS servers (like Filestore), or other
+filesystems which Linux has built-in mount support. For this to work, for
+each NFS server, provide an IP address and an export name. The IP address must
+be reachable by the VPC subnets intended to be used for clusters.</p>
+<p>An internal address can be used if the cluster shares the same VPC with the
+imported filesystem. Alternatively, system administrators can set up hybrid
+connectivity (such as establishing network peering) before mounting the
+external filesystem located elsewhere on GCP.</p>
+<h2 id="cluster-management">Cluster Management</h2>
+<p>HPC clusters can be created after setting up the hosting VPC and any
+additional filesystems. The Open Front End can manage the whole lifecycle of
+clusters. Click the <em>Clusters</em> item in the main menu to list all
+existing clusters.</p>
+<h3 id="cluster-status">Cluster Status</h3>
+<p>Clusters can be in different states and their <em>Actions</em> menus adapt to this
+information to show different actions:</p>
+<ul>
+<li><code>n</code>: Cluster is being newly configured by user. At this stage, a new
+  cluster is being set up by an administrator. Only a database record exists,
+  and no cloud resource has been created yet. User is free to edit this cluster:
+  rename it, re-configure its associated network and storage components, and add
+  authorized users. Click <em>Start</em> from the cluster detail page to actually
+  provision the cluster on GCP.</li>
+<li><code>c</code>: Cluster is being created. This is a state when the backend
+  Terraform scripts is being invoked to commission the cloud resources for the
+  Cluster. This transient stage typically lasts for a few minutes.</li>
+<li><code>i</code>: Cluster is being initialised. This is a state when the cluster
+  hardware is already online, and Ansible playbooks are being executed to
+  install and configure the software environment of the Slurm controller and
+  login nodes. This transient stage can last for up to 15 minutes.</li>
+<li><code>r</code>: Cluster is ready for jobs. The cluster is now ready to use.
+  Applications can be installed and jobs can run on it. A Slurm job scheduler is
+  running on the controller node to orchestrate job activities.</li>
+<li><code>t</code>: Cluster is terminating. This is a transient state after Terraform
+  is being invoked to destroy the cluster. This stage can take a few minutes
+  when Terraform is working with the cloud platform to decommission cloud
+  resources.</li>
+<li><code>d</code>: Cluster has been destroyed. When destroyed, a cluster cannot be
+  brought back online. Only the relevant database record remains for information
+  archival purposes.</li>
+</ul>
+<p>A visual indication is shown on the website for the cluster being in creating,
+initialising or destroying states. Also, relevant web pages will refresh every
+15 seconds to pick status changes.</p>
+<h3 id="create-a-new-cluster">Create a New Cluster</h3>
+<p>A typical workflow for creating a new cluster is as follows:</p>
+<ol>
+<li>At the bottom of the cluster list page, click the <em>Add cluster</em> button to
+   start creating a new cluster. In the next form, choose a cloud credential.
+   This is the Google Service Account which will create the cloud resources.
+   Click the <em>Next</em> button to go to a second form from which details of the
+   cluster can be specified.</li>
+<li>In the <em>Create a new cluster</em> form, give the new cluster a name. Cloud
+   resource names are subject to naming constraints and will be validated by the
+   system. In general, lower-case alpha-numeric names with hyphens are
+   accepted.</li>
+<li>From the <em>Subnet</em> dropdown list, select the subnet within which the cluster
+   resides.</li>
+<li>From the <em>Cloud zone</em> dropdown list, select a zone.</li>
+<li>From the <em>Authorised users</em> list, select users that are allowed to use this
+   cluster.</li>
+<li>Click the <em>Save</em> button to store the cluster settings in the database.
+   Continue from the <em>Cluster Detail</em> page.</li>
+<li>Click the <em>Edit</em> button to make additional changes. such as creating more
+   Slurm partitions for different compute node instance types, or mounting
+   additional filesystems.</li>
+<li>For filesystems, note the two existing shared filesystems defined by
+     default. Additional ones can be mounted if they have been created earlier.
+     Note the <em>Mounting order</em> parameter only matters if the <em>Mount path</em>
+     parameter has dependencies.</li>
+<li>For cluster partitions, note that one <em>c2-standard-60</em> partition is
+     defined by default. Additional partitions can be added, supporting
+     different instance types. Enable or disable hyperthreading and node reuse
+     as appropriate. Also, placement group can be enabled (for C2 and C2D
+     partitions only). In the <em>image</em> field one can optionally supply a custom
+     image to be used by the compute nodes. Administrators should ensure such
+     an image is compatible with the Rocky Linux 9 based Slurm machine images used by the Cluster Toolkit
+     GCP. Otherwise additional customisation done by this system might fail.</li>
+<li>Finally, save the configurations and click the <em>Create</em> button to trigger
+   the cluster creation.</li>
+</ol>
+<h3 id="remote-desktop-options">Remote Desktop Options</h3>
+<p>When creating or editing a cluster, two optional desktop targets can be
+enabled. Both give users a Linux desktop in the browser over noVNC, with one
+session per user, authenticated through the Front End and the user's OS Login
+account.</p>
+<ul>
+<li><strong>Login node desktop</strong>: enables per-user desktop sessions on the cluster's
+  login node. Choose the VNC backend: <em>TigerVNC</em> (software rendering) is the
+  default.</li>
+<li><strong>Visualisation desktop</strong>: adds a separate desktop target backed by a
+  dedicated single-node Slurm partition. Options:<ul>
+<li><em>Partition mode</em>: one dynamic node allocated on demand when a user starts
+  the desktop, or one static node that is always provisioned.</li>
+<li><em>Instance type</em> for the desktop host.</li>
+<li><em>GPU type and count</em>, for example one <code>nvidia-l4</code>. GPU desktops require
+  the <em>TurboVNC</em> backend, which uses VirtualGL for accelerated OpenGL.</li>
+<li><em>Placement</em>: cluster zone only, any zone in the region (lets Google Cloud
+  find GPU capacity, at the cost of cross-zone network charges), or an
+  existing Compute Engine reservation (guaranteed capacity, billed whether
+  or not the desktop is running).</li>
+</ul>
+</li>
+</ul>
+<p>Users reach their desktops from the cluster's <em>Remote Desktops</em> page. Stopping
+a desktop powers its node down, so only the user who started it or an
+administrator can stop it. A desktop node that is allocated but idle still
+incurs cost, as does a static desktop node at all times.</p>
+<h3 id="destroying-a-cluster">Destroying a Cluster</h3>
+<p>To destroy a cluster, first find the list of clusters in the <em>Clusters</em> menu,
+then simply select <em>Destroy</em> in the <em>Actions</em> menu and confirm. Any jobs still
+running on the Cluster will be terminated.</p>
+<h2 id="user-management">User Management</h2>
+<h3 id="ssh-access-to-the-service-machine">SSH Access to the Service Machine</h3>
+<p>SSH access to the service machine is possible for administration purposes.
+Administrators can choose from one of the following options:</p>
+<ul>
+<li><a href="https://cloud.google.com/compute/docs/instances/connecting-to-instance">SSH directly from the GCP console</a>.</li>
+<li><a href="https://cloud.google.com/compute/docs/connect/add-ssh-keys#add_ssh_keys_to_instance_metadata">Add their public SSH key to the VM instance after deployment via GCP console</a>.</li>
+<li><a href="https://cloud.google.com/compute/docs/connect/add-ssh-keys#add_ssh_keys_to_project_metadata">Add their SSH key to the GCP project to use on all VMs within the project</a>.</li>
+</ul>
+<p><em>N.B The service machine is not, by default, configured to use the os-login service.</em></p>
+<h3 id="setup-google-oauth2-login">Setup Google OAuth2 Login</h3>
+<p>While it is possible to use a Django user account to access the Open Front End,
+and indeed doing so is required for some administration tasks, standard
+users must authenticate using their Google identities via Google OAuth2. This,
+combined with the use of Google OSLogin for access to clusters, ensures
+consistent Linux identities across VM instances that form the clusters. The
+Front End login is made possible by the <em>django-allauth</em> social login extension.</p>
+<p>For a working deployment, a fully-qualified domain name must be obtained and
+attached to the website as configured in the deployment script. Next, register
+the site with the hosting GCP project on the GCP console in the <em>Credentials</em>
+section under <em>APIs and services</em> category. Note that the <em>Authorised JavaScript
+origins</em> field should contain a callback URL in the following format:
+<code>https://&lt;domain_name&gt;/accounts/google/login/callback/</code></p>
+<p><img alt="Oauth set-up" src="../../images/GCP-app-credential.png" /></p>
+<p>From the GCP console note the <code>client ID</code> and <code>client secret</code>, then return to
+the Admin site of the deployment and locate the <em>social applications</em> database
+table. A <em>Google API</em> record should have been created during the deployment.
+Replace the two placeholders with the <code>client ID</code> and <code>client secret</code>. The site
+is ready to accept Google login.</p>
+<p><img alt="Social login set-up" src="../../images/register-social-app.png" /></p>
+<h4 id="set-allowed-users-by-email-address">Set Allowed Users by Email Address</h4>
+<p>Next, go to the <em>Authorised user</em> table. This is where further access control
+to the site is applied. Create new entries to grant access to users. A new
+entry can be:</p>
+<ul>
+<li>a valid domain name to grant access to multiple users from authorised
+organisations (e.g. <em>@example.com</em>)</li>
+<li>an email address to grant access to an individual user (e.g
+<em>user.name@example.com</em>)</li>
+</ul>
+<p>All login attempts that do not match these patterns will be rejected.</p>
+<h4 id="note-on-external-users">Note on External Users</h4>
+<p>If you wish to allow users from outside your Google Cloud organization to use
+the cluster you will need to additionally assign these users the
+<code>roles/compute.osLoginExternalUser</code> role at an Organization level (there is no
+way to assign at the project level).</p>
+<p>User accounts will be automatically created for users when they log into the
+FrontEnd for the first time, by default new accounts are created with quota
+disabled. To enable job submission for an account, administrators must enable
+compute quota from the <em>Users</em> page.</p>
+<h3 id="user-compute-quota">User Compute Quota</h3>
+<p>Currently three quota modes are supported:</p>
+<ul>
+<li><strong>Quota Disabled (default)</strong>: a User may not submit jobs.</li>
+<li><strong>Unlimited quota</strong>: a User may submit an unlimited number of jobs.</li>
+<li><strong>Limited quota</strong>: a User may submit jobs up to a total spend limit in USD.</li>
+</ul>
+<p>When <strong>limited quota</strong> is selected, an additional field <strong>quota amount</strong> will
+be available to set the total spend available to the user.</p>
+<h2 id="application-management">Application Management</h2>
+<p>Please see the <a href="../application_guide/">Application Guide</a>.</p>
+<h2 id="workbench-management">Workbench Management</h2>
+<p>Please see the <a href="../workbench_admin_guide/">Workbench Admin Guide</a>.</p>
+<h2 id="teardown-process">Teardown Process</h2>
+<p>The Open Front End directory in the Cluster Toolkit repository contains a <code>teardown.sh</code> script that will destroy
+the running Open Front End instance. This script only removes the Open Front
+End, not resources started from it.</p>
+<p><strong>Before running the teardown script, ensure that all clusters, VPCs,
+workbenches and filestores are removed using the Open Front End web interface
+before destroying it. These resources will otherwise persist and accrue costs.</strong></p>
+<p>To teardown the Open Front End and its hosting infrastructure, run
+<code>./teardown.sh</code> on the original client machine within the same directory that
+was used to deploy the Open Front End.</p>
+<p>Note: If the <code>-y</code> flag is passed to the teardown script, all user questions
+will be answered with "yes". This is intended for automated deployments where
+user input is not possible.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<h3 id="finding-log-files">Finding Log Files</h3>
+<p>The service machine produces log files in <code>/opt/gcluster/run/</code>. These log
+files will show errors from the Django web application.</p>
+<p>Cloud resource deployment log files (from Terraform) are typically shown via
+the Open Front End. If those logs are not being shown, they can be found on
+the service machine under
+<code>/opt/gcluster/cluster-toolkit/frontend/(clusters|fs|vpc)/</code>.
+Cluster Toolkit log files will also be found in those directories. The Terraform
+log files and status files will be down a few directories, based off of the
+Cluster Number, Deployment ID, and Terraform directory.</p>
+<p>On Cluster controllers, most of the useful log files for debugging can be
+retrieved by executing the <em>Sync Cluster</em> command. These include Slurm log
+files as well as general system log files. The daemon which communicates to
+the service machine logs to syslog, and can be viewed on the cluster controller
+node via <code>journalctl</code>, looking at the <code>ghpcfe_c2</code> service.</p>
+<p>Job logs and Spack application logs are uploaded upon job completion to Google
+Cloud Storage and viewable via the Front End.</p>
+<h3 id="deployment-problems">Deployment Problems</h3>
+<p>Most deployment problems are caused by not having the right permissions. If
+this is the case, an error message will normally show what permissions are
+missing. Use the <a href="https://cloud.google.com/iam/docs/permissions-reference">IAM permissions reference</a>
+to research this and identify additional roles to add to your user account.</p>
+<p>Before any attempt to redeploy the Open Front End, make sure to run
+<code>terraform destroy</code> in <code>cluster-toolkit/frontend/tf</code> to remove cloud resources that
+have been already created.</p>
+<h3 id="cluster-problems">Cluster Problems</h3>
+<p>The Open Front End should be quite reliable provisioning clusters. However,
+in cloud computing, errors occur from time to time, usually due to changes in
+back-end services. For example, a resource creation could fail because the
+hosting GCP project has ran out of certain resource quotas, or an upgrade of an
+underlying machine image might have introduced changes that are incompatible to
+the Open Front End, which then needs updating.</p>
+<p>It's not possible to capture all such situations. Here, a list of tips is
+given to help debug cluster creation problems. The
+<a href="../../developers/developer_guide/">Developer Guide</a> contains a lot of details on how the
+back-end logic is handled, which can also help with certain issues.</p>
+<ul>
+<li>If a cluster is stuck at status <em>c</em>, something is wrong with the provisioning
+  of cluster hardware. SSH into the service machine and identify the directory
+  containing the run-time data for that cluster at 
+  <code>frontend/clusters/cluster_&lt;cluster_id&gt;</code> where <code>&lt;cluster_id&gt;</code> can be found on
+  the Front End. Check the Terraform log files there for debugging information.</li>
+<li>If a cluster is stuck at status <em>i</em>, hardware resources should have been
+  commissioned properly and there is something wrong in the software
+  configuration stage. Locate the IP address of the Slurm controller node and
+  find its VM instance on GCP console. Check its related <em>Serial port</em> for the
+  system log. If necessary, SSH into the controller from the GCP console to
+  check Slurm logs under <code>/var/log/slurm/</code>.</li>
+</ul>
+<h3 id="general-clean-up-tips">General Clean-up Tips</h3>
+<ul>
+<li>If a cluster is stuck in <em>i</em> state, it is normally OK to find the <em>Destroy</em>
+  button from its <em>Actions</em> menu to destroy it.</li>
+<li>For failed network/filesystem/cluster creations, one may need to SSH into the
+  service machine, locate the run-time data directory, and manually run
+  <code>terraform destroy</code> there for clean up cloud resources.</li>
+<li>Certain database records might get corrupted and need to be removed for
+  failed clusters or network/filesystem components. This can be done from the
+  Django Admin site, although Admins need to exercise caution while
+  modifying the raw data in Django database.</li>
+</ul>
+<hr />
+<p><em>This guide is adapted from <a href="https://github.com/GoogleCloudPlatform/cluster-toolkit/blob/main/community/front-end/ofe/docs/admin_guide.md"><code>admin_guide.md</code></a> in the Cluster Toolkit repository. Last synced with upstream commit <code>d27dd72</code> (21 October 2026).</em></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+      <div class="md-consent" data-md-component="consent" id="__consent" hidden>
+        <div class="md-consent__overlay"></div>
+        <aside class="md-consent__inner">
+          <form class="md-consent__form md-grid md-typeset" name="consent">
+            
+
+
+
+<h4>Cookie consent</h4>
+<p>We use Google Analytics to see which pages are visited and whether the documentation is useful, so we can improve it. Nothing is used for advertising. You can change your choice at any time from the "Cookie settings" link.</p>
+<input class="md-toggle" type="checkbox" id="__settings" >
+<div class="md-consent__settings">
+  <ul class="task-list">
+    
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="github" checked>
+      <span class="task-list-indicator"></span>
+      GitHub
+    </label>
+  </li>
+
+      
+    
+    
+      
+        
+  
+  
+    
+    
+  
+  <li class="task-list-item">
+    <label class="task-list-control">
+      <input type="checkbox" name="analytics" checked>
+      <span class="task-list-indicator"></span>
+      Google Analytics
+    </label>
+  </li>
+
+      
+    
+  </ul>
+</div>
+<div class="md-consent__controls">
+  
+    
+      <button class="md-button md-button--primary">Accept</button>
+    
+    
+    
+  
+    
+    
+      <button type="reset" class="md-button md-button--primary">Reject</button>
+    
+    
+  
+    
+    
+    
+      <label class="md-button" for="__settings">Manage settings</label>
+    
+  
+</div>
+          </form>
+        </aside>
+      </div>
+      <script>var consent=__md_get("__consent");if(consent)for(var input of document.forms.consent.elements)input.name&&(input.checked=consent[input.name]||!1);else"file:"!==location.protocol&&setTimeout((function(){document.querySelector("[data-md-component=consent]").hidden=!1}),250);var form=document.forms.consent;for(var action of["submit","reset"])form.addEventListener(action,(function(e){if(e.preventDefault(),"reset"===e.type)for(var n of document.forms.consent.elements)n.name&&(n.checked=!1);__md_set("__consent",Object.fromEntries(Array.from(new FormData(form).keys()).map((function(e){return[e,!0]})))),location.hash="",location.reload()}))</script>
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.path", "search.suggest", "search.highlight", "toc.follow", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+        <script src="../../javascripts/analytics.js"></script>
+      
+    
+  </body>
+</html>
