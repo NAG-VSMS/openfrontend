@@ -1,3 +1,8 @@
+---
+description: >-
+  Architecture of the Open Front End: Django, Terraform, Pub/Sub and the Cluster Toolkit, service machine layout, run-time data and how to extend the code.
+---
+
 # Developer Guide
 
 ## Architecture design

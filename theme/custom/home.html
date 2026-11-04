@@ -1,4 +1,63 @@
 {% extends "main.html" %}
+
+{# Single source for the FAQ: rendered as HTML below and as FAQPage JSON-LD in the head #}
+{% set ofe_faqs = [
+  ("What is the Open Front End?",
+   "A web application, built with Django, that uses the Google Cloud Cluster Toolkit to create and manage Slurm HPC clusters on Google Cloud. Administrators manage clusters, storage, applications and users from a browser; users submit jobs and open notebooks. The upstream documentation also calls it the Cluster Toolkit FrontEnd, or TKFE."),
+  ("Is it free to use?",
+   "Yes. It is open source under the Apache 2.0 licence and lives in the Cluster Toolkit repository. You pay only for the Google Cloud resources it creates: the service VM, cluster nodes, Filestore and storage buckets."),
+  ("Do I need to know Terraform or Cluster Toolkit blueprints?",
+   "No. The Front End generates the blueprint and runs the toolkit and Terraform for you. Administrators need basic Google Cloud knowledge: projects, IAM roles and billing. Terraform is only installed on the client machine for the one-off deploy script."),
+  ("How long does deployment take?",
+   "The deploy script finishes in about 15 minutes, then the service machine takes up to 15 more to install its software stack. A first cluster typically reaches the ready state 15 to 20 minutes after you click Create."),
+  ("How is it different from the Cluster Toolkit itself?",
+   "The Cluster Toolkit is a command-line tool that turns YAML blueprints into Terraform. The Open Front End is a web layer on top of it, shipped in the same repository under community/front-end/ofe, that generates those blueprints from a form and tracks the clusters, applications and jobs it creates."),
+  ("Can I use an existing VPC, subnet or filesystem?",
+   "Yes. Existing VPCs and subnets in the project can be imported, and any filesystem that Linux can mount over the network can be registered. Filestore instances can also be created from the web interface."),
+  ("How do users log in, and how is spending controlled?",
+   "Standard users sign in with their Google identity through OAuth2, which also gives them consistent Linux accounts on cluster nodes. Administrators authorise users per cluster and give each user a quota: disabled, unlimited, or a spend limit in US dollars."),
+  ("Who maintains it and where do I get help?",
+   "It is developed in the GoogleCloudPlatform/cluster-toolkit repository on GitHub, with contributions from NAG. Report bugs as GitHub issues. For help deploying or customising it for your organisation, contact NAG using the link on this page."),
+] %}
+
+{% block extrahead %}
+{{ super() }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Open Front End",
+      "alternateName": ["OFE", "Cluster Toolkit FrontEnd", "TKFE", "Google Cluster Toolkit Open Front End"],
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Google Cloud",
+      "url": "{{ config.site_url }}",
+      "description": {{ (config.site_description | replace("\n", " ") | trim) | tojson }},
+      "license": "https://www.apache.org/licenses/LICENSE-2.0",
+      "isAccessibleForFree": true,
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "softwareHelp": { "@type": "CreativeWork", "url": "{{ config.site_url }}admins/admin_guide/" },
+      "codeRepository": "https://github.com/GoogleCloudPlatform/cluster-toolkit/tree/main/community/front-end/ofe",
+      "keywords": "HPC, Slurm, Google Cloud, Cluster Toolkit, HPC Toolkit, Spack, Vertex AI Workbench, web interface"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% for q, a in ofe_faqs %}
+        {
+          "@type": "Question",
+          "name": {{ q | tojson }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ a | tojson }} }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+  ]
+}
+</script>
+{% endblock %}
+
 {% block tabs %}
 {{ super() }}
 <style>
@@ -109,6 +168,15 @@
     }
     .ofe-help h2, .ofe-help p { color: inherit; }
     .ofe-help p { margin: 0; opacity: .95; }
+
+    /* ---- FAQ ---- */
+    .ofe-faq { display: grid; gap: .5rem; }
+    .ofe-faq details { background: var(--ofe-surface); border: 1px solid var(--ofe-outline); border-radius: var(--ofe-radius); padding: 0 1.1rem; }
+    .ofe-faq summary { cursor: pointer; font-weight: 600; padding: .9rem 0; list-style: none; display: flex; justify-content: space-between; gap: 1rem; align-items: center; min-height: 48px; box-sizing: border-box; }
+    .ofe-faq summary::-webkit-details-marker { display: none; }
+    .ofe-faq summary::after { content: "+"; font-size: 1.3rem; color: var(--ofe-primary); flex: none; }
+    .ofe-faq details[open] summary::after { content: "\2212"; }
+    .ofe-faq details p { color: var(--ofe-muted); margin: 0 0 1rem; }
 
     /* ---- Footer links ---- */
     .ofe-links { display: flex; flex-wrap: wrap; gap: 1.25rem; padding: 0; margin: 0; list-style: none; font-size: .75rem; }
@@ -330,6 +398,21 @@ cd cluster-toolkit/community/front-end/ofe
         <div class="ofe-feature"><h3>Networks and filesystems</h3><p>Create VPCs and Filestore instances, or import existing ones, and share them across clusters.</p></div>
         <div class="ofe-feature"><h3>Multi-project</h3><p>Deploy in one project and provision resources in others by registering separate service account credentials.</p></div>
         <div class="ofe-feature"><h3>Open source</h3><p>Apache 2.0, developed in the Cluster Toolkit repository. Contributions welcome.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= FAQ ======================= -->
+  <section class="ofe-section ofe-section--alt" id="faq">
+    <div class="ofe-inner">
+      <h2>Frequently asked questions</h2>
+      <div class="ofe-faq">
+        {% for q, a in ofe_faqs %}
+        <details{% if loop.first %} open{% endif %}>
+          <summary>{{ q }}</summary>
+          <p>{{ a }}</p>
+        </details>
+        {% endfor %}
       </div>
     </div>
   </section>

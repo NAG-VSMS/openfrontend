@@ -1,4 +1,13 @@
 site_name: Open Front End
+site_url: https://openfrontend.org/
+site_description: >-
+  The Open Front End is an open-source web interface for the Google Cloud
+  Cluster Toolkit (formerly HPC Toolkit). Deploy Slurm HPC clusters, install
+  applications with Spack and submit jobs from a browser.
+site_author: NAG
+repo_url: https://github.com/GoogleCloudPlatform/cluster-toolkit
+repo_name: GoogleCloudPlatform/cluster-toolkit
+edit_uri: ""
 
 theme:
   name: material

@@ -1,3 +1,8 @@
+---
+description: >-
+  Install HPC applications on Open Front End clusters with Spack, custom build scripts, or by registering software already on the shared filesystem.
+---
+
 # Application Installation Guide
 
 Administrators can install and manage applications in TKFE in the following

@@ -1,3 +1,8 @@
+---
+description: >-
+  How the Open Front End service machine and Slurm clusters communicate over Google Cloud Pub/Sub, including message types and IAM bindings.
+---
+
 # Command and Control of Clusters
 
 Previous incarnations of this Frontend relied on the frontend webserver instance being able to SSH directly to clusters in order to performance command and control (C2) operations. When clusters were created, an admin user was set that would accept a public ssh key for which the webserver owned the private key. This was largely straightforward, and worked quite well. The clusters were also able to make HTTP API queries to the webserver.

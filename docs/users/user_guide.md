@@ -1,3 +1,8 @@
+---
+description: >-
+  Run HPC jobs through the Open Front End: log in with Google, choose an application, submit jobs with Cloud Storage input and output, and compare benchmarks.
+---
+
 # User Guide
 
 This guide is for standard users of the Open Front End, who can access HPC

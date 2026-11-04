@@ -1,3 +1,8 @@
+---
+description: >-
+  Create, access and destroy Vertex AI Workbench JupyterLab notebooks from the Open Front End, with cluster storage mounted.
+---
+
 # Workbench User Guide
 
 Vertex AI Workbenches give the user a dedicated interactive environment to

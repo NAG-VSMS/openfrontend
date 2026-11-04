@@ -1,3 +1,8 @@
+---
+description: >-
+  Deploy the Open Front End for Google Cloud Cluster Toolkit, register a service account, and create networks, filesystems, Slurm clusters and users from the web interface.
+---
+
 # Admin Guide
 
 This guide is for administrators of the Open Front End. An

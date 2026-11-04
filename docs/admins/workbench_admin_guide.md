@@ -1,3 +1,8 @@
+---
+description: >-
+  Configure Vertex AI Workbench notebooks in the Open Front End: trusted users, machine type presets, storage mounts and troubleshooting.
+---
+
 # Workbench Management
 
 The Workbench feature provides a way to create and control VertexAI

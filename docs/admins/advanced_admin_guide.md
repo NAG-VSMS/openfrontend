@@ -1,3 +1,8 @@
+---
+description: >-
+  Multi-project deployments, creating service accounts by helper script, GCP Console or gcloud, and least-privilege roles and APIs for the Open Front End.
+---
+
 # Advanced Admin Guide
 
 This guide outlines some advanced features for deploying and maintaining the
