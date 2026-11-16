@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Open Front End: a walkthrough</title>
+<meta name="description" content="A step-by-step walkthrough of the Open Front End for Google Cloud Cluster Toolkit: compliant foundations, the cluster wizard, browser desktops, Open OnDemand, the Gemini cluster advisor and how to deploy it." />
+<link rel="canonical" href="https://openfrontend.org/walkthrough/" />
+<link rel="icon" href="../images/favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Open Front End: a walkthrough" />
+<meta property="og:description" content="From compliant foundations to Open Front End: HPC on Google Cloud for every user, in fifteen steps." />
+<meta property="og:url" content="https://openfrontend.org/walkthrough/" />
+<meta property="og:image" content="https://openfrontend.org/images/social-card.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#16283E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<!--
+  Open Front End walkthrough. Modelled on the nAG Storm architecture page
+  (storm.nag.com/architecture) and following OFE_Outline.pptx:
+  title, what OFE is, improved user experience (cluster build, remote desktop,
+  Open OnDemand), Gemini integration, cloud native, thank you.
+  One page, no build step, no third-party script. Advance with right arrow / Space / click /
+  swipe; left arrow goes back; A toggles autoplay (loops, for a booth screen); F is fullscreen.
+  #step=N in the URL opens a given step.
+  The diagram is ONE stage (1200 x 900 units) scaled to fit. Each step reveals blocks
+  (data-in="N") and moves a camera (CAMERA below). "Screen" steps (SCREENS below) show a
+  screenshot or the demo video over the dimmed diagram.
+  MkDocs copies this folder verbatim, so it is served at /walkthrough/.
+  Colours: nAG brand guidelines, as on the Storm page.
+-->
+<style>
+  /* Colours: nAG brand. Primary: Dark blue #16283E, White, Light blue #0099DB, Light Grey #EAEAEA,
+     Green #A8CFAE, Dark Grey #9FA394. Secondary: Orange #E07524, Light Blue #82C8F1.
+     Light blue = what Open Front End adds; green = the open-source Cluster Toolkit core. */
+  :root {
+    --bg: #16283E;
+    --bg-2: color-mix(in srgb, #16283E 85%, #000000); /* shade of NAG Dark blue */
+    --panel: color-mix(in srgb, #16283E 92%, #FFFFFF); /* tint of NAG Dark blue */
+    --line: rgba(255, 255, 255, 0.10);
+    --ink: #FFFFFF;
+    --muted: #9FA394;
+    --accent: #0099DB;            /* NAG Light blue (brand primary) — everything nAG adds */
+    --accent-soft: rgba(0, 153, 219, 0.14);
+    --accent-glow: rgba(0, 153, 219, 0.45);
+    --core: #A8CFAE;              /* NAG Green — Slinky core */
+    --core-soft: rgba(168, 207, 174, 0.14);
+    --core-glow: rgba(168, 207, 174, 0.5);
+    --gpu: #E07524;               /* NAG Orange — GPU chip */
+    --font: "Montserrat", "Proxima Nova", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --ease: cubic-bezier(0.22, 0.8, 0.24, 1);
+    --t: 900ms;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background:
+      radial-gradient(1200px 700px at 30% 40%, rgba(8, 67, 144, 0.55) 0%, transparent 60%),
+      radial-gradient(900px 600px at 85% 90%, rgba(0, 153, 219, 0.10) 0%, transparent 60%),
+      var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- page layout ---------- */
+  .app {
+    height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    /* Explicit, not the implicit `auto` column: that one grew to its content's min width
+       (668 px on a 390 px phone) and pushed the whole page sideways. */
+    grid-template-columns: minmax(0, 1fr);
+  }
+  header.top {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 22px;
+  }
+  /* The logo + name lead back to the landing page (storm.nag.com). */
+  header.top .home {
+    display: flex; align-items: center; gap: 14px;
+    color: inherit; text-decoration: none; border-radius: 8px; padding: 2px 4px; margin: -2px -4px;
+  }
+  header.top .home:hover img { opacity: 1; }
+  header.top .home:hover .name { color: var(--accent); }
+  header.top .home:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-glow); }
+  header.top img { height: 26px; filter: brightness(0) invert(1); opacity: 0.92; }
+  header.top .sep { width: 1px; height: 22px; background: var(--line); }
+  header.top .name { font-weight: 700; letter-spacing: 0.01em; }
+  header.top .hint { margin-left: auto; color: var(--muted); font-size: 12.5px; }
+  header.top .hint kbd {
+    font: 600 11px/1 var(--font); color: var(--ink);
+    border: 1px solid var(--line); border-radius: 5px; padding: 3px 6px; margin: 0 2px;
+  }
+
+  main {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 400px;
+    transition: grid-template-columns var(--t) var(--ease);
+  }
+  .app[data-mode="overview"] main,
+  .app[data-mode="title"] main { grid-template-columns: minmax(0, 1fr) 0px; }
+
+  /* ---------- the stage ---------- */
+  .viewport { position: relative; min-height: 0; min-width: 0; overflow: hidden; cursor: pointer; }
+  .stage {
+    position: absolute; left: 50%; top: 50%;
+    width: 1200px; height: 900px;
+    transform-origin: 0 0;
+  }
+  .camera {
+    position: absolute; inset: 0;
+    transform-origin: 0 0;
+    transition: transform 1200ms var(--ease);
+  }
+
+  .blk {
+    position: absolute;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)), var(--panel);
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease),
+                border-color var(--t) var(--ease), box-shadow var(--t) var(--ease), filter var(--t) var(--ease);
+  }
+  .blk.is-in { opacity: 0.5; transform: none; filter: saturate(0.6); }
+  .blk.is-now, .app[data-mode="overview"] .blk.is-in { opacity: 1; filter: none; }
+  .blk.nag.is-now { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 40px var(--accent-soft); }
+  .blk.core.is-now { border-color: var(--core); box-shadow: 0 0 0 1px var(--core), 0 0 50px var(--core-soft); }
+  .app[data-mode="overview"] .blk.nag { border-color: rgba(0, 153, 219,0.55); }
+  .app[data-mode="overview"] .blk.core { border-color: rgba(168, 207, 174,0.7); box-shadow: 0 0 40px var(--core-soft); }
+
+  .blk h3 {
+    margin: 0; font-size: 17px; font-weight: 700; letter-spacing: 0.005em;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .blk h3 .ico {
+    width: 30px; height: 30px; flex: none; border-radius: 9px;
+    display: grid; place-items: center;
+    background: var(--accent-soft); color: var(--accent);
+  }
+  .blk.core h3 .ico { background: var(--core-soft); color: var(--core); }
+  .blk h3 .ico svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .blk .sub { margin: 4px 0 0 40px; color: var(--muted); font-size: 12.5px; }
+  .tag {
+    margin-left: auto; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--accent); border: 1px solid rgba(0, 153, 219,0.45); border-radius: 999px; padding: 3px 8px;
+  }
+  .blk.core .tag { color: var(--core); border-color: rgba(168, 207, 174,0.5); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .chip {
+    font-size: 12.5px; font-weight: 600; color: var(--ink);
+    padding: 6px 10px; border-radius: 9px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+  .chip.gpu { color: #E07524; border-color: rgba(224, 117, 36,0.55); background: rgba(224, 117, 36,0.12); }
+  .list { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+  .list li {
+    font-size: 13px; font-weight: 500; color: #EAEAEA;
+    padding: 8px 10px; border-radius: 9px; background: rgba(255,255,255,0.04);
+    border-left: 2px solid rgba(0, 153, 219,0.6);
+  }
+
+  /* Slinky core: the hero */
+  .core-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 14px; }
+  .core-grid .cell {
+    border-radius: 11px; padding: 10px 12px;
+    background: rgba(168, 207, 174,0.08); border: 1px solid rgba(168, 207, 174,0.28);
+  }
+  .core-grid .cell b { display: block; font-size: 13.5px; }
+  .core-grid .cell span { display: block; margin-top: 3px; font-size: 11.5px; color: var(--muted); }
+  .core-grid .cell .gpu-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--gpu); margin-right: 5px; vertical-align: 1px; }
+
+  /* the frame: delivery models wrap everything */
+  .frame {
+    position: absolute; left: 12px; top: 12px; width: 1176px; height: 876px;
+    border-radius: 30px; border: 1.5px dashed rgba(0, 153, 219,0.55);
+    opacity: 0; transform: scale(1.03);
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease), box-shadow var(--t) var(--ease);
+    pointer-events: none;
+  }
+  .frame.is-in { opacity: 0.55; transform: none; }
+  .frame.is-now, .app[data-mode="overview"] .frame.is-in { opacity: 1; box-shadow: inset 0 0 80px rgba(0, 153, 219,0.07); }
+  .delivery {
+    position: absolute; left: 0; right: 0; top: -21px;
+    display: flex; justify-content: center; gap: 12px;
+  }
+  .delivery .pill {
+    font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 999px;
+    background: #16283E; color: #82C8F1; border: 1px solid var(--accent);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+  }
+  .frame.is-now .pill { box-shadow: 0 0 0 1px var(--accent), 0 0 28px var(--accent-glow), 0 6px 24px rgba(0,0,0,0.4); }
+  .frame .brand {
+    position: absolute; left: 26px; bottom: -13px; padding: 2px 12px;
+    background: var(--bg); color: var(--accent); font-size: 13px; font-weight: 700; letter-spacing: 0.06em;
+  }
+
+  /* wires between layers and the core */
+  svg.wires { position: absolute; inset: 0; width: 1200px; height: 900px; overflow: visible; pointer-events: none; }
+  svg.wires path {
+    fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round;
+    stroke-dasharray: 6 8; opacity: 0;
+    transition: opacity var(--t) var(--ease);
+  }
+  svg.wires path.is-in { opacity: 0.55; animation: flow 1.6s linear infinite; }
+  svg.wires circle { fill: var(--accent); opacity: 0; transition: opacity var(--t) var(--ease); }
+  svg.wires circle.is-in { opacity: 0.9; }
+  @keyframes flow { to { stroke-dashoffset: -28; } }
+
+  /* the closing line on the overview */
+  .tagline {
+    position: absolute; left: 0; right: 0; top: 818px; text-align: center;
+    font-size: 26px; font-weight: 700; letter-spacing: -0.01em;
+    opacity: 0; transform: translateY(12px);
+    transition: opacity var(--t) var(--ease) 300ms, transform var(--t) var(--ease) 300ms;
+  }
+  .tagline em { font-style: normal; color: var(--core); }
+  .tagline strong { color: var(--accent); }
+  .app[data-mode="overview"] .tagline { opacity: 1; transform: none; }
+
+  /* ---------- title screen ---------- */
+  .title {
+    position: absolute; inset: 0; display: grid; place-items: center; text-align: center;
+    padding: 24px; pointer-events: none;
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  }
+  .app:not([data-mode="title"]) .title:not(.end) { opacity: 0; transform: scale(0.96); }
+  .title .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: 0.08em; font-size: 15px; }
+  .title h1 { margin: 14px 0 0; font-size: clamp(40px, 7vw, 84px); line-height: 1.02; letter-spacing: -0.03em; }
+  .title h1 span { color: var(--accent); }
+  .title p { margin: 18px auto 0; max-width: 640px; color: #EAEAEA; font-size: clamp(16px, 2vw, 21px); line-height: 1.5; }
+  .title p em { font-style: normal; color: var(--core); font-weight: 600; }
+  .title .go { margin-top: 30px; color: var(--muted); font-size: 14px; animation: pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: 0.45; } }
+  .app[data-mode="title"] .camera { filter: blur(2px); opacity: 0.35; }
+  .camera { transition: transform 1200ms var(--ease), filter var(--t) var(--ease), opacity var(--t) var(--ease); }
+
+  /* ---------- story panel ---------- */
+  aside.story {
+    position: relative; overflow: hidden; min-width: 0;
+    display: grid; grid-template-rows: minmax(0, 1fr) auto;
+    border-left: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  }
+  .cards { position: relative; min-height: 0; }
+  .card {
+    position: absolute; inset: 0; padding: 34px 30px; overflow-y: auto;
+    opacity: 0; transform: translateX(24px);
+    transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+    pointer-events: none;
+  }
+  .card.is-now { opacity: 1; transform: none; transition-delay: 250ms; pointer-events: auto; }
+  .card .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; color: var(--accent); }
+  .card.core-card .eyebrow { color: var(--core); }
+  .card h2 { margin: 10px 0 0; font-size: 30px; line-height: 1.12; letter-spacing: -0.02em; }
+  .card .lead { margin: 14px 0 0; color: #EAEAEA; font-size: 16px; line-height: 1.55; }
+  .card ul { margin: 20px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .card li {
+    position: relative; padding-left: 22px; font-size: 14.5px; line-height: 1.5; color: #EAEAEA;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 500ms var(--ease), transform 500ms var(--ease);
+  }
+  .card li::before {
+    content: ""; position: absolute; left: 0; top: 0.55em; width: 9px; height: 9px; border-radius: 3px;
+    background: var(--accent);
+  }
+  .card.core-card li::before { background: var(--core); }
+  .card.is-now li { opacity: 1; transform: none; }
+  .card.is-now li:nth-child(1) { transition-delay: 550ms; }
+  .card.is-now li:nth-child(2) { transition-delay: 650ms; }
+  .card.is-now li:nth-child(3) { transition-delay: 750ms; }
+  .card.is-now li:nth-child(4) { transition-delay: 850ms; }
+  .card.is-now li:nth-child(5) { transition-delay: 950ms; }
+
+  /* ---------- controls ---------- */
+  footer.controls {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 22px 16px;
+  }
+  .btn {
+    appearance: none; border: 1px solid var(--line); background: rgba(255,255,255,0.04); color: var(--ink);
+    font: 600 13px/1 var(--font); padding: 10px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .btn:hover { background: rgba(255,255,255,0.09); }
+  .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-glow); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #16283E; }
+  .btn.primary:hover { background: #82C8F1; }
+  .btn[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+  /* "Try the live trial": outlined in nAG orange, so it stands out without competing with Next. */
+  .btn.trial { border-color: var(--accent); color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .btn.trial:hover { background: var(--accent-soft); }
+  header.top .trial-top { display: none; margin-left: auto; padding: 8px 12px; font-size: 12.5px; }
+  .dots { display: flex; gap: 7px; align-items: center; margin: 0 auto; }
+  .dot {
+    appearance: none; border: 0; padding: 0; cursor: pointer;
+    width: 9px; height: 9px; border-radius: 99px; background: rgba(255,255,255,0.18);
+    transition: width 400ms var(--ease), background 400ms var(--ease);
+  }
+  .dot.is-now { width: 28px; background: var(--accent); }
+  .dot.is-done { background: rgba(0, 153, 219,0.45); }
+  .dot:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-glow); }
+  .count { color: var(--muted); font-size: 12.5px; min-width: 52px; text-align: right; }
+
+  /* ---------- QR to the live trial (booth screens: visitors scan it from their phones) ----------
+     Always on screen: a card in its own row at the foot of the story panel during the steps, so
+     it never covers story text; a large one in the corner of the title screen and the overview
+     (the story panel is collapsed there). Dark modules on white with a 4-module quiet zone —
+     scanners need the contrast. Hidden on phones and portrait screens: those visitors are on the
+     device already, and the header has the trial link. */
+  .qr {
+    display: flex; align-items: center; gap: 14px;
+    margin: 0 18px 18px; padding: 12px 14px; border-radius: 14px;
+    background: var(--panel); border: 1px solid var(--line);
+    color: var(--ink); text-decoration: none;
+  }
+  .qr svg { flex: none; width: 132px; height: 132px; border-radius: 8px; display: block; }
+  .qr b { display: block; font-size: 15px; color: var(--accent); }
+  .qr span { display: block; margin-top: 6px; font-size: 13px; line-height: 1.45; color: var(--muted); }
+  .qr span.url { color: var(--ink); font-weight: 600; }
+  main { position: relative; }
+  .qr.hero {
+    position: absolute; right: 40px; bottom: 32px; z-index: 3; margin: 0; width: 300px;
+    flex-direction: column; text-align: center;
+    opacity: 0; transform: translateY(12px); pointer-events: none;
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  }
+  .qr.hero svg { width: 240px; height: 240px; }
+  .qr.hero b { font-size: 18px; }
+  .app[data-mode="title"] .qr.hero,
+  .app[data-mode="overview"] .qr.hero { opacity: 1; transform: none; pointer-events: auto; }
+  /* The overview fills the stage edge to edge; keep its card small so it stays off the diagram. */
+  .app[data-mode="overview"] .qr.hero { right: 22px; bottom: 18px; width: 200px; padding: 10px; }
+  .app[data-mode="overview"] .qr.hero svg { width: 150px; height: 150px; }
+  .app[data-mode="overview"] .qr.hero span:not(.url) { display: none; }
+  /* Laptop-height screens (1366x768): a compact card, so the story cards still fit unscrolled. */
+  @media (max-height: 860px) {
+    .qr:not(.hero) { margin: 0 14px 14px; padding: 10px 12px; }
+    .qr:not(.hero) svg { width: 100px; height: 100px; }
+    .qr:not(.hero) span:not(.url) { display: none; }
+    .card { padding-top: 24px; }
+    .qr.hero { width: 220px; padding: 10px; bottom: 18px; right: 22px; }
+    .qr.hero svg { width: 140px; height: 140px; }
+    .qr.hero span:not(.url) { display: none; }
+    .app[data-mode="overview"] .qr.hero svg { width: 120px; height: 120px; }
+  }
+
+  /* ---------- small screens: the diagram on top, the story underneath ---------- */
+  @media (max-width: 880px), (orientation: portrait) {
+    body { overflow-x: hidden; overflow-y: auto; }
+    .app { height: auto; min-height: 100%; }
+    /* minmax(0, …): a plain 1fr column may grow to its content's min width and push the page
+       sideways — which is what the control bar did on a 390 px phone. */
+    main, .app[data-mode="overview"] main, .app[data-mode="title"] main {
+      grid-template-columns: minmax(0, 1fr); grid-template-rows: 58vh auto;
+    }
+    aside.story { border-left: 0; border-top: 1px solid var(--line); }
+    .app[data-mode="overview"] aside.story, .app[data-mode="title"] aside.story { display: none; }
+    /* One card in normal flow, so the panel grows to fit its text instead of clipping it. */
+    .card { position: relative; inset: auto; display: none; padding: 22px 18px 28px; overflow: visible; }
+    .card.is-now { display: block; animation: card-in 600ms var(--ease) both; }
+    .card li { opacity: 1; transform: none; }
+    @keyframes card-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+    .card h2 { font-size: 24px; }
+    header.top .hint { display: none; }
+    footer.controls { position: sticky; bottom: 0; z-index: 2; background: var(--bg); gap: 10px; padding: 10px 14px 14px; }
+    #auto, #full, .count { display: none; }  /* booth-screen tools; a phone has its own */
+    /* The bottom bar is full on a phone (Back, dots, Next), so the trial link moves to the header. */
+    footer.controls .trial { display: none; }
+    header.top .trial-top { display: inline-flex; }
+    .qr, .qr.hero { display: none; }
+    .dots { gap: 5px; }
+    .dot { width: 7px; height: 7px; }
+    .dot.is-now { width: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition-duration: 1ms !important; transition-delay: 0ms !important; }
+  }
+
+  /* ================= Open Front End additions =================
+     Same stage-and-story design as storm.nag.com/architecture, plus "screen" steps:
+     a browser frame with a screenshot or the demo video, shown over the dimmed diagram. */
+  :root { --hero: #82C8F1; }
+  .app[data-mode="end"] main { grid-template-columns: minmax(0, 1fr) 0px; }
+  .app[data-mode="screen"] .camera { filter: blur(3px); opacity: 0.18; }
+  .app[data-mode="end"] .camera { filter: blur(2px); opacity: 0.3; }
+  .app[data-mode="screen"] .viewport { cursor: default; }
+  .app:not([data-mode="end"]) .title.end { opacity: 0; transform: scale(0.96); }
+  .app[data-mode="end"] .title.end { opacity: 1; transform: none; }
+  /* Longer headlines than the Storm page: smaller type, and lifted clear of the QR card. */
+  .title h1 { font-size: clamp(34px, 5.2vw, 70px); }
+  .title > div { transform: translateY(-7vh); }
+  .title.end .url { margin-top: 26px; font-size: clamp(22px, 3.2vw, 38px); font-weight: 700; letter-spacing: -0.01em; }
+  .title.end .url a { color: var(--accent); text-decoration: none; pointer-events: auto; }
+  .title.end .url a:hover { color: var(--hero); }
+  .app[data-mode="end"] .qr.hero { opacity: 1; transform: none; pointer-events: auto; }
+
+  /* the portal block is the hero of this story */
+  .blk.portal h3 .ico { background: rgba(130, 200, 241, 0.16); color: var(--hero); }
+  .blk .sub.flush { margin-left: 40px; }
+
+  /* screens */
+  .screens {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    padding: 26px 30px; container-type: size; pointer-events: none;
+  }
+  .screen {
+    grid-area: 1 / 1; margin: 0;
+    width: min(100cqw, calc((100cqh - 38px) * var(--ar, 1.94)));
+    border-radius: 14px; overflow: hidden;
+    background: #0d1826; border: 1px solid rgba(255,255,255,0.16);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,153,219,0.25), 0 0 60px rgba(0,153,219,0.12);
+    opacity: 0; transform: translateY(22px) scale(0.965);
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  }
+  .screen.is-now { opacity: 1; transform: none; pointer-events: auto; cursor: pointer; transition-delay: 150ms; }
+  .screen.has-video.is-now { cursor: default; }
+  .screen .bar {
+    height: 38px; display: flex; align-items: center; gap: 7px; padding: 0 14px;
+    background: color-mix(in srgb, #16283E 80%, #FFFFFF 6%); border-bottom: 1px solid var(--line);
+    font-size: 12.5px; font-weight: 600; color: #EAEAEA; white-space: nowrap; overflow: hidden;
+  }
+  .screen .bar i { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.22); flex: none; }
+  .screen .bar span { margin-left: 8px; overflow: hidden; text-overflow: ellipsis; }
+  .screen .bar em { margin-left: auto; font-style: normal; color: var(--muted); font-weight: 500; padding-left: 12px; }
+  .screen img, .screen video { display: block; width: 100%; height: auto; background: #fff; }
+  .screen video { background: #16283E; }
+
+  .btn { white-space: nowrap; }
+  header.top .name { white-space: nowrap; }
+  .card .more {
+    display: inline-flex; align-items: center; gap: 6px; margin-top: 22px;
+    font-weight: 700; font-size: 14px; color: var(--accent); text-decoration: none;
+    border: 1px solid rgba(0,153,219,0.5); border-radius: 999px; padding: 9px 14px;
+  }
+  .card .more:hover { background: var(--accent-soft); }
+  .card code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92em; color: var(--core); }
+
+  @media (max-width: 880px), (orientation: portrait) {
+    .app[data-mode="end"] aside.story { display: none; }
+    .title > div { transform: none; }
+    /* A screenshot is wide: give screen steps a shorter stage so the story sits closer. */
+    .app[data-mode="screen"] main { grid-template-rows: 40vh auto; }
+    .title h1 { font-size: clamp(28px, 8vw, 44px); }
+    header.top { padding: 12px 14px; gap: 10px; }
+    header.top .home { gap: 10px; }
+    header.top img { height: 22px; }
+    header.top .name { font-size: 14px; }
+    header.top .trial-top { padding: 8px 10px; font-size: 12px; }
+    .screens { padding: 12px; }
+    .screen .bar { height: 30px; font-size: 11px; }
+    .screen .bar em { display: none; }
+    .title.end .url { margin-top: 18px; }
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- QR for https://openfrontend.org/?qr (segno, version 3, ECC M). Regenerate if the URL changes. -->
+  <symbol id="qr-home" viewBox="0 0 37 37"><path fill="#fff" d="M0 0h37v37h-37z"/><path class="qrline" stroke="#16283e" d="M4 4.5h7m2 0h1m1 0h1m1 0h4m2 0h2m1 0h7m-29 1h1m5 0h1m1 0h1m2 0h2m2 0h4m3 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h2m2 0h1m3 0h2m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h3m2 0h1m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m6 0h1m3 0h1m1 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m1 0h1m1 0h5m1 0h1m2 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-20 1h5m3 0h1m2 0h1m-20 1h3m1 0h2m3 0h1m2 0h2m1 0h1m2 0h2m5 0h2m-28 1h1m1 0h1m1 0h2m2 0h3m1 0h1m1 0h2m1 0h4m1 0h4m2 0h1m-28 1h1m1 0h1m2 0h1m1 0h1m2 0h3m1 0h1m2 0h1m3 0h1m1 0h4m-28 1h2m1 0h1m1 0h1m2 0h2m2 0h1m7 0h1m2 0h2m3 0h1m-29 1h1m3 0h1m1 0h2m2 0h1m1 0h4m1 0h1m1 0h3m1 0h1m2 0h3m-29 1h2m2 0h2m2 0h3m2 0h1m1 0h1m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-26 1h1m1 0h2m1 0h2m1 0h1m7 0h2m1 0h4m1 0h2m-29 1h2m1 0h1m1 0h1m4 0h1m3 0h3m1 0h5m1 0h2m1 0h1m-27 1h3m1 0h2m1 0h1m1 0h2m1 0h3m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-27 1h2m1 0h2m1 0h1m3 0h2m10 0h1m2 0h1m-27 1h1m2 0h5m2 0h1m3 0h1m2 0h1m2 0h1m1 0h1m3 0h1m-25 1h1m1 0h1m4 0h2m2 0h1m1 0h3m1 0h1m1 0h2m1 0h3m-26 1h1m1 0h1m1 0h2m1 0h5m1 0h5m1 0h8m-20 1h2m1 0h1m4 0h2m2 0h1m3 0h2m2 0h1m-29 1h7m2 0h1m1 0h3m2 0h1m1 0h3m1 0h1m1 0h1m1 0h2m-28 1h1m5 0h1m1 0h5m1 0h2m1 0h1m2 0h1m3 0h1m-25 1h1m1 0h3m1 0h1m3 0h5m1 0h1m3 0h7m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h3m1 0h1m1 0h1m2 0h1m1 0h1m4 0h4m-28 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m2 0h1m2 0h1m2 0h1m1 0h1m2 0h1m-29 1h1m5 0h1m1 0h3m1 0h1m1 0h2m2 0h1m1 0h1m3 0h1m2 0h1m-28 1h7m3 0h1m2 0h1m4 0h1m1 0h4m3 0h1"/></symbol>
+</svg>
+
+<div class="app" data-mode="title" data-step="0">
+  <header class="top">
+    <a class="home" href="https://openfrontend.org/" title="Open Front End home" aria-label="Open Front End home">
+      <img src="nag-logo.png" alt="nAG" />
+      <span class="sep" aria-hidden="true"></span>
+      <span class="name">Open Front End</span>
+    </a>
+    <span class="hint"><kbd>←</kbd><kbd>→</kbd> step &nbsp;·&nbsp; <kbd>A</kbd> autoplay &nbsp;·&nbsp; <kbd>F</kbd> fullscreen</span>
+    <a class="btn trial trial-top" href="https://openfrontend.org/tutorials/deploy-with-cloud-shell/" target="_blank" rel="noopener">Deploy it ↗</a>
+  </header>
+
+  <main>
+    <div class="viewport" id="viewport" aria-label="Walkthrough: click to advance">
+      <div class="stage" id="stage">
+        <div class="camera" id="camera">
+
+          <!-- 13: how it is delivered wraps the whole picture -->
+          <div class="frame" data-in="13">
+            <div class="delivery">
+              <span class="pill">Open source</span>
+              <span class="pill">In your Google Cloud project</span>
+              <span class="pill">Supported by nAG</span>
+            </div>
+            <span class="brand">Open Front End</span>
+          </div>
+
+          <svg class="wires" viewBox="0 0 1200 900" aria-hidden="true">
+            <path data-in="3" d="M282 600 C 310 600, 312 600, 338 600" /><circle data-in="3" cx="338" cy="600" r="4" />
+            <path data-in="3" d="M282 735 C 310 735, 312 735, 338 735" /><circle data-in="3" cx="338" cy="735" r="4" />
+            <path data-in="4" d="M282 186 C 310 186, 312 186, 338 186" /><circle data-in="4" cx="338" cy="186" r="4" />
+            <path data-in="9" d="M918 186 C 890 186, 888 186, 862 186" /><circle data-in="9" cx="862" cy="186" r="4" />
+            <path data-in="9" d="M918 350 C 890 350, 888 392, 862 392" /><circle data-in="9" cx="862" cy="392" r="4" />
+            <path data-in="11" d="M918 600 C 890 600, 888 600, 862 600" /><circle data-in="11" cx="862" cy="600" r="4" />
+            <path data-in="11" d="M918 735 C 890 735, 888 735, 862 735" /><circle data-in="11" cx="862" cy="735" r="4" />
+          </svg>
+
+          <!-- 11: cloud native (right, bottom) -->
+          <section class="blk nag" data-in="11" style="left:920px; top:410px; width:250px; height:392px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 1 1 .9-8.9A6 6 0 0 1 19 11a3.5 3.5 0 0 1-.5 7z"/></svg></span>Cloud native</h3>
+            <ul class="list">
+              <li>Containerised services</li>
+              <li>Simple, repeatable updates</li>
+              <li>Security &amp; compliance</li>
+              <li>Monitoring with Grafana</li>
+              <li>Production grade</li>
+            </ul>
+          </section>
+
+          <!-- 9: Gemini advisor (right, top) -->
+          <section class="blk nag" data-in="9" style="left:920px; top:100px; width:250px; height:285px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3c.6 4.6 4.4 8.4 9 9-4.6.6-8.4 4.4-9 9-.6-4.6-4.4-8.4-9-9 4.6-.6 8.4-4.4 9-9z"/></svg></span>Gemini advisor</h3>
+            <ul class="list">
+              <li>Describe the workload</li>
+              <li>Ranked blueprints</li>
+              <li>Validated by gcluster</li>
+              <li>Cost estimate</li>
+            </ul>
+          </section>
+
+          <!-- 4: user experience (left, top) -->
+          <section class="blk nag" data-in="4" style="left:30px; top:100px; width:250px; height:285px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>User experience</h3>
+            <ul class="list">
+              <li>Guided cluster wizard</li>
+              <li>Desktop in the browser</li>
+              <li>Open OnDemand</li>
+              <li>Google sign-in</li>
+            </ul>
+          </section>
+
+          <!-- 3: compliant foundations (left, bottom) -->
+          <section class="blk nag" data-in="3" style="left:30px; top:410px; width:250px; height:392px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 8-7 9.5-4-1.5-7-5.1-7-9.5V6z"/><path d="M9 12l2 2 4-4"/></svg></span>Compliant foundations</h3>
+            <ul class="list">
+              <li>Your project, your policies</li>
+              <li>IAM &amp; OS Login identity</li>
+              <li>IAP access, no public IPs</li>
+              <li>Customer-managed keys</li>
+              <li>Private networking</li>
+            </ul>
+          </section>
+
+          <!-- 1: the Open Front End portal -->
+          <section class="blk nag portal" data-in="1" style="left:340px; top:100px; width:520px; height:172px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/></svg></span>Open Front End<span class="tag">Open source · Apache 2.0</span></h3>
+            <p class="sub">One web portal for HPC on Google Cloud</p>
+            <div class="chips">
+              <span class="chip">Clusters</span>
+              <span class="chip">Networks &amp; storage</span>
+              <span class="chip">Applications</span>
+              <span class="chip">Jobs</span>
+              <span class="chip">Users &amp; quotas</span>
+              <span class="chip">Benchmarks</span>
+            </div>
+          </section>
+
+          <!-- 2: the Cluster Toolkit core -->
+          <section class="blk core" data-in="2" style="left:340px; top:286px; width:520px; height:244px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></span>Cluster Toolkit<span class="tag">Open source · Google</span></h3>
+            <p class="sub">Curated blueprints, turned into infrastructure</p>
+            <div class="core-grid">
+              <div class="cell"><b>Blueprints</b><span>proven recipes</span></div>
+              <div class="cell"><b>Modules</b><span>network · storage · compute</span></div>
+              <div class="cell"><b>gcluster</b><span>validates &amp; expands</span></div>
+              <div class="cell"><b>Terraform</b><span>applied for you</span></div>
+              <div class="cell"><b>Packer</b><span>machine images</span></div>
+              <div class="cell"><b>Spack</b><span>packaged applications</span></div>
+            </div>
+          </section>
+
+          <!-- 2: what gets built, and where -->
+          <section class="blk nag" data-in="2" style="left:340px; top:544px; width:520px; height:110px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Slurm cluster<span class="tag">What you get</span></h3>
+            <div class="chips">
+              <span class="chip">Controller</span>
+              <span class="chip">Login nodes</span>
+              <span class="chip">Partitions</span>
+              <span class="chip">Storage</span>
+              <span class="chip gpu">NVIDIA GPUs</span>
+            </div>
+          </section>
+          <section class="blk nag" data-in="2" style="left:340px; top:668px; width:520px; height:134px;">
+            <h3><span class="ico"><svg viewBox="0 0 24 24"><path d="M7 18a4.5 4.5 0 1 1 .9-8.9A6 6 0 0 1 19 11a3.5 3.5 0 0 1-.5 7z"/></svg></span>Google Cloud<span class="tag">Your project</span></h3>
+            <div class="chips">
+              <span class="chip">Compute Engine</span>
+              <span class="chip">Filestore</span>
+              <span class="chip">Cloud Storage</span>
+              <span class="chip">VPC &amp; IAP</span>
+              <span class="chip">Vertex AI</span>
+            </div>
+          </section>
+
+          <div class="tagline"><em>Cluster Toolkit</em> at the core. <strong>Open Front End</strong> for everyone around it.</div>
+        </div>
+      </div>
+
+      <!-- screen steps: real screens from a live Open Front End, and the Gemini demo recording -->
+      <div class="screens" id="screens">
+        <figure class="screen" data-step="5" style="--ar:1.938">
+          <div class="bar"><i></i><i></i><i></i><span>Open Front End · Create cluster</span><em>step 1 of 8</em></div>
+          <img src="wizard-1.webp" width="1440" height="743" loading="lazy" alt="The cluster creation wizard: an eight-step tracker across the top (Cluster, Account, Network, Login nodes, Partitions, Storage, Encryption and advanced, Review), a form for the cluster name and authorised users, and a summary panel on the right." />
+        </figure>
+        <figure class="screen" data-step="6" style="--ar:1.938">
+          <div class="bar"><i></i><i></i><i></i><span>Open Front End · Cluster detail</span><em>status: ready</em></div>
+          <img src="cluster-detail.webp" width="1440" height="743" loading="lazy" alt="The cluster detail page: status Ready with a Grafana dashboard link, controller and login node details, and a Remote access panel with buttons for the login node desktop, the visualization desktop, and Open OnDemand dashboard, files, shell, active jobs and job composer." />
+        </figure>
+        <figure class="screen" data-step="7" style="--ar:1.975">
+          <div class="bar"><i></i><i></i><i></i><span>Login node desktop · noVNC</span><em>in a browser tab</em></div>
+          <img src="desktop.webp" width="1440" height="729" loading="lazy" alt="A Linux desktop running in the browser on the cluster's login node. A terminal shows sinfo listing the batch partition, an empty squeue, and Spack-built software modules." />
+        </figure>
+        <figure class="screen" data-step="8" style="--ar:1.975">
+          <div class="bar"><i></i><i></i><i></i><span>Open OnDemand · Dashboard</span><em>Files · Jobs · Clusters · Desktops</em></div>
+          <img src="ood.webp" width="1440" height="729" loading="lazy" alt="The Open OnDemand dashboard served by the cluster, with menus for Files, Jobs, Clusters, Interactive Apps, Desktops and Open Front End." />
+        </figure>
+        <figure class="screen has-video" data-step="10" style="--ar:1.6">
+          <div class="bar"><i></i><i></i><i></i><span>Cluster Builder with Gemini · demo recording</span><em>2 min 50 s · captions, no sound</em></div>
+          <video id="demo" src="gemini-demo.mp4" poster="gemini-poster.webp" width="1280" height="800" controls muted playsinline preload="none" aria-label="Screen recording of the Gemini cluster builder: describing a GROMACS workload, choosing a ranked blueprint, asking questions, reducing cost, adding a remote desktop, and reviewing the validated changes."></video>
+        </figure>
+        <figure class="screen" data-step="12" style="--ar:1.938">
+          <div class="bar"><i></i><i></i><i></i><span>openfrontend.org</span><em>documentation and tutorial</em></div>
+          <img src="site.webp" width="1440" height="743" loading="lazy" alt="The deploy section of openfrontend.org: a guided Cloud Shell tutorial with an Open in Cloud Shell button, beside the three commands to deploy from your own machine." />
+        </figure>
+      </div>
+
+      <div class="title" aria-hidden="false">
+        <div>
+          <div class="eyebrow">Google Cloud for Engineering and Beyond</div>
+          <h1>From compliant foundations<br />to <span>Open Front End</span></h1>
+          <p>Open Front End makes HPC on Google Cloud easier to use: a web portal over the <em>Cluster Toolkit</em> that lets every user get the HPC they want, when they want it.</p>
+          <div class="go">Press → or tap to begin</div>
+        </div>
+      </div>
+
+      <div class="title end">
+        <div>
+          <div class="eyebrow">Thank you</div>
+          <h1>Make your HPC and AI journey<br /><span>a success</span></h1>
+          <p>We want to help. Come and talk to <em>nAG</em>.</p>
+          <div class="url"><a href="https://openfrontend.org/" data-ofe-event="walkthrough_site_click">www.openfrontend.org</a></div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="story" aria-live="polite">
+      <div class="cards">
+      <article class="card" data-step="1">
+        <div class="eyebrow">The idea</div>
+        <h2>HPC on Google Cloud, for everyone who needs it</h2>
+        <p class="lead">Open Front End puts a web portal in front of the Cluster Toolkit, so people get the HPC they want, when they want it.</p>
+        <ul>
+          <li>Improves the ease of use of HPC on Google Cloud.</li>
+          <li>Puts power into the hands of all users, not only cloud specialists.</li>
+          <li>You concentrate on your workloads, not on the HPC.</li>
+          <li>Open source: ultimately, build the interfaces that work for you.</li>
+        </ul>
+      </article>
+
+      <article class="card core-card" data-step="2">
+        <div class="eyebrow">The engine · open source by Google</div>
+        <h2>Curated, proven recipes</h2>
+        <p class="lead">Every cluster starts from a Cluster Toolkit blueprint. Open Front End fills in the form; the toolkit does the building.</p>
+        <ul>
+          <li><b>Blueprints</b> and <b>modules</b> for networks, storage, Slurm and GPUs.</li>
+          <li><code>gcluster</code> validates and expands every configuration before anything is created.</li>
+          <li>Terraform and Packer apply it. Nobody writes them by hand.</li>
+          <li>Applications packaged with Spack, ready to load as modules.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="3">
+        <div class="eyebrow">Starts from · compliant foundations</div>
+        <h2>Built on compliant foundations</h2>
+        <p class="lead">Open Front End deploys into your own Google Cloud project, under your organisation's policies, not beside them.</p>
+        <ul>
+          <li>Runs in your project and your network.</li>
+          <li>Google sign-in, IAM and OS Login give every user one identity.</li>
+          <li>Desktops and portals sit behind Identity-Aware Proxy; machines need no public IP.</li>
+          <li>Customer-managed encryption keys where you require them.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="4">
+        <div class="eyebrow">Open Front End adds · user experience</div>
+        <h2>Familiar tools, easy adoption</h2>
+        <p class="lead">The tools HPC users already know, one click from the cluster page.</p>
+        <ul>
+          <li>A guided wizard builds a cluster in eight steps.</li>
+          <li>A Linux desktop in the browser, on the login node or a visualization machine.</li>
+          <li>Open OnDemand for files, shells and jobs.</li>
+          <li>One Google sign-in across all of it.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="5">
+        <div class="eyebrow">Demo · cluster build</div>
+        <h2>A cluster in eight guided steps</h2>
+        <p class="lead">Name it, pick an account and a network, size the nodes, choose storage, review, create.</p>
+        <ul>
+          <li>The tracker shows where you are; the summary fills in as you go.</li>
+          <li><b>Next</b> waits until a step's required choices are made.</li>
+          <li>The account and the network can be set up automatically along the way.</li>
+          <li>Sensible defaults: most steps can be left as they are.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="6">
+        <div class="eyebrow">Demo · the cluster page</div>
+        <h2>From Create to Ready, on one page</h2>
+        <p class="lead">Status, nodes, logs and every way in, together.</p>
+        <ul>
+          <li>Live status from creating to ready, with logs in the browser.</li>
+          <li>Remote desktops and Open OnDemand one click away.</li>
+          <li>SSH and tunnel commands ready to copy.</li>
+          <li>A Grafana dashboard for each cluster.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="7">
+        <div class="eyebrow">Demo · remote desktop</div>
+        <h2>A Linux desktop in the browser</h2>
+        <p class="lead">Nothing to install: open a tab and you are on the cluster.</p>
+        <ul>
+          <li>A login node desktop for everyday interactive work.</li>
+          <li>A visualization desktop on its own machine, with an optional GPU.</li>
+          <li>Per-user sessions, under your own OS Login account.</li>
+          <li>Slurm and the Spack-built modules are right there in the terminal.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="8">
+        <div class="eyebrow">Demo · Open OnDemand</div>
+        <h2>Open OnDemand, built in</h2>
+        <p class="lead">The portal many HPC sites already use, switched on with one tick in the wizard.</p>
+        <ul>
+          <li>Files, shell, active jobs and the job composer.</li>
+          <li>Health-checked, and linked from the cluster page.</li>
+          <li>Behind the same Google sign-in as everything else.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="9">
+        <div class="eyebrow">Open Front End adds · AI</div>
+        <h2>Gemini, as a cluster advisor</h2>
+        <p class="lead">Describe the workload in plain language. Gemini starts from a real blueprint and proposes changes for you to approve.</p>
+        <ul>
+          <li>Ranked starting points, each with a reason and a match score.</li>
+          <li>It uses proven recipes: the AI does not hallucinate a cluster into existence.</li>
+          <li>Every proposal is built by the server and validated with <code>gcluster expand</code>.</li>
+          <li>A cost estimate for the compute, and answers to "how could I make this cheaper?"</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="10">
+        <div class="eyebrow">Demo · cluster builder with Gemini</div>
+        <h2>Watch the agent work</h2>
+        <p class="lead">A three-minute recording with captions. Press play, or let autoplay run it.</p>
+        <ul>
+          <li>You describe what you want.</li>
+          <li>Gemini looks things up with read-only tools.</li>
+          <li>It states the change as data; it never writes YAML.</li>
+          <li>The server builds <code>deployment.yaml</code> and validates it.</li>
+          <li>You review the diff and accept. Nothing is deployed from the chat.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="11">
+        <div class="eyebrow">Open Front End · cloud native</div>
+        <h2>Cloud native, production grade</h2>
+        <p class="lead">Built and run the way modern cloud services are.</p>
+        <ul>
+          <li>Containerised services.</li>
+          <li>Simple, repeatable updates.</li>
+          <li>Security and compliance from the foundations up.</li>
+          <li>Monitoring built in, with Grafana.</li>
+        </ul>
+      </article>
+
+      <article class="card" data-step="12">
+        <div class="eyebrow">Try it · openfrontend.org</div>
+        <h2>Deploy it in about 40 minutes</h2>
+        <p class="lead">A guided tutorial runs the whole deployment from Google Cloud Shell.</p>
+        <ul>
+          <li>Open in Cloud Shell: nothing to install.</li>
+          <li>Ends with a ready cluster and a clean teardown.</li>
+          <li>Guides for users, administrators and developers.</li>
+        </ul>
+        <a class="more" href="https://openfrontend.org/tutorials/deploy-with-cloud-shell/" target="_blank" rel="noopener" data-ofe-event="walkthrough_tutorial_click">Open the tutorial ↗</a>
+      </article>
+      </div>
+
+      <a class="qr" href="https://openfrontend.org/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 37 37" role="img" aria-label="QR code for https://openfrontend.org/"><use href="#qr-home" /></svg>
+        <div><b>Scan for the docs</b><span>Guides, the Cloud Shell tutorial and the source.</span><span class="url">openfrontend.org</span></div>
+      </a>
+    </aside>
+
+    <a class="qr hero" href="https://openfrontend.org/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 37 37" role="img" aria-label="QR code for https://openfrontend.org/"><use href="#qr-home" /></svg>
+      <div><b>Scan for the docs</b><span>Guides, the Cloud Shell tutorial and the source.</span><span class="url">openfrontend.org</span></div>
+    </a>
+  </main>
+
+  <footer class="controls">
+    <button class="btn" id="prev" type="button" aria-label="Previous step">← Back</button>
+    <button class="btn" id="auto" type="button" aria-pressed="false" title="Advance automatically and loop (A)">Autoplay</button>
+    <a class="btn trial" href="https://openfrontend.org/tutorials/deploy-with-cloud-shell/" target="_blank" rel="noopener" data-ofe-event="walkthrough_tutorial_click">Deploy with Cloud Shell ↗</a>
+    <div class="dots" id="dots" role="tablist" aria-label="Steps"></div>
+    <span class="count" id="count" aria-hidden="true"></span>
+    <button class="btn" id="full" type="button" title="Fullscreen (F)">Fullscreen</button>
+    <button class="btn primary" id="next" type="button" aria-label="Next step">Next →</button>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // 0 = title, 1..12 = story, 13 = overview, 14 = thank you.
+  var LAST = 14, OVERVIEW = 13;
+  var STEP_NAMES = ["Start", "Open Front End", "Proven recipes", "Compliant foundations", "User experience",
+                    "Demo: cluster build", "Demo: cluster page", "Demo: remote desktop", "Demo: Open OnDemand",
+                    "Gemini advisor", "Demo: Gemini", "Cloud native", "Deploy it", "Overview", "Thank you"];
+  // Steps that show a screenshot or the video instead of the diagram.
+  var SCREENS = { 5: 1, 6: 1, 7: 1, 8: 1, 10: 1, 12: 1 };
+  var VIDEO_STEP = 10;
+
+  // Where the camera looks at each step: focus point (stage units) and zoom.
+  var CAMERA = [
+    { x: 600, y: 450, s: 1.0 },  // title (blurred)
+    { x: 600, y: 210, s: 1.5 },  // the portal
+    { x: 600, y: 452, s: 1.16 }, // + Cluster Toolkit, Slurm cluster, Google Cloud
+    { x: 500, y: 470, s: 1.06 }, // + compliant foundations
+    { x: 500, y: 450, s: 1.0 },  // + user experience
+    { x: 600, y: 450, s: 1.0 },  // screens
+    { x: 600, y: 450, s: 1.0 },
+    { x: 600, y: 450, s: 1.0 },
+    { x: 600, y: 450, s: 1.0 },
+    { x: 640, y: 420, s: 1.0 },  // + Gemini
+    { x: 600, y: 450, s: 1.0 },  // video
+    { x: 600, y: 450, s: 1.0 },  // + cloud native
+    { x: 600, y: 450, s: 1.0 },  // site
+    { x: 600, y: 450, s: 0.97 }, // overview, with the delivery frame
+    { x: 600, y: 450, s: 0.97 }  // thank you (blurred)
+  ];
+  var AUTOPLAY_MS = 8000;
+
+  var app = document.querySelector(".app");
+  var viewport = document.getElementById("viewport");
+  var stage = document.getElementById("stage");
+  var camera = document.getElementById("camera");
+  var reveal = Array.prototype.slice.call(document.querySelectorAll("[data-in]"));
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".card"));
+  var screens = Array.prototype.slice.call(document.querySelectorAll(".screen"));
+  var video = document.getElementById("demo");
+  var dotsBox = document.getElementById("dots");
+  var count = document.getElementById("count");
+  var autoBtn = document.getElementById("auto");
+
+  var step = 0, timer = null, auto = false;
+
+  function fit() {
+    var w = viewport.clientWidth, h = viewport.clientHeight;
+    var k = Math.min(w / 1200, h / 900) * 0.96;
+    stage.style.transform = "scale(" + k + ") translate(-600px, -450px)";
+  }
+
+  function mode() {
+    if (step === 0) return "title";
+    if (step === LAST) return "end";
+    if (step === OVERVIEW) return "overview";
+    return SCREENS[step] ? "screen" : "step";
+  }
+
+  function render() {
+    app.setAttribute("data-step", String(step));
+    app.setAttribute("data-mode", mode());
+
+    reveal.forEach(function (el) {
+      var n = Number(el.getAttribute("data-in"));
+      el.classList.toggle("is-in", step >= n && step > 0);
+      el.classList.toggle("is-now", step === n);
+    });
+    cards.forEach(function (c) {
+      c.classList.toggle("is-now", Number(c.getAttribute("data-step")) === step);
+    });
+    screens.forEach(function (s) {
+      var on = Number(s.getAttribute("data-step")) === step;
+      s.classList.toggle("is-now", on);
+      // Load the picture one step early so it is there when the screen fades in.
+      var img = s.querySelector("img");
+      if (img && Math.abs(Number(s.getAttribute("data-step")) - step) <= 1) img.loading = "eager";
+    });
+    document.querySelector(".title:not(.end)").setAttribute("aria-hidden", step === 0 ? "false" : "true");
+    document.querySelector(".title.end").setAttribute("aria-hidden", step === LAST ? "false" : "true");
+
+    // The recording plays while its step is shown, and stops when you move on.
+    if (video) {
+      if (step === VIDEO_STEP) {
+        try { video.currentTime = 0; } catch (e) { /* not loaded yet */ }
+        var p = video.play(); if (p && p.catch) p.catch(function () { /* needs a tap: the controls are there */ });
+      } else if (!video.paused) { video.pause(); }
+    }
+
+    var cam = CAMERA[step];
+    var tx = 600 - cam.x * cam.s, ty = 450 - cam.y * cam.s;
+    camera.style.transform = "translate(" + tx + "px," + ty + "px) scale(" + cam.s + ")";
+
+    Array.prototype.forEach.call(dotsBox.children, function (d, i) {
+      d.classList.toggle("is-now", i === step);
+      d.classList.toggle("is-done", i < step);
+      d.setAttribute("aria-selected", i === step ? "true" : "false");
+    });
+    count.textContent = step === 0 ? "" : step + " / " + LAST;
+    document.getElementById("prev").disabled = step === 0;
+    document.getElementById("next").textContent = step === LAST ? "Start over ↺" : "Next →";
+
+    try { history.replaceState(null, "", step ? "#step=" + step : location.pathname); } catch (e) { /* file:// */ }
+    setTimeout(fit, 50); setTimeout(fit, 500); setTimeout(fit, 1000);
+    schedule();
+    track("walkthrough_step", { step: step, step_name: STEP_NAMES[step] });
+  }
+
+  function go(n) { step = (n + LAST + 1) % (LAST + 1); render(); }
+  function next() { go(step + 1); }
+  function prev() { if (step > 0) go(step - 1); }
+
+  // Autoplay: a fixed time per step, except the recording, which runs to its end.
+  function schedule() {
+    if (timer) { clearTimeout(timer); timer = null; }
+    if (!auto) return;
+    if (step === VIDEO_STEP && video && !video.error) return; // 'ended' advances
+    timer = setTimeout(next, AUTOPLAY_MS);
+  }
+  function setAuto(on) {
+    auto = on;
+    autoBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    schedule();
+  }
+  function userAction(fn) { setAuto(false); fn(); }
+  if (video) {
+    video.addEventListener("ended", function () { if (auto && step === VIDEO_STEP) next(); });
+    video.addEventListener("error", function () { if (auto && step === VIDEO_STEP) schedule(); });
+    // Using the player's own controls must not advance the walkthrough.
+    video.addEventListener("click", function (e) { e.stopPropagation(); });
+  }
+
+  for (var i = 0; i <= LAST; i++) {
+    var d = document.createElement("button");
+    d.className = "dot"; d.type = "button"; d.setAttribute("role", "tab");
+    d.setAttribute("aria-label", STEP_NAMES[i]);
+    d.title = STEP_NAMES[i];
+    (function (n) { d.addEventListener("click", function () { userAction(function () { go(n); }); }); })(i);
+    dotsBox.appendChild(d);
+  }
+  document.getElementById("next").addEventListener("click", function () { userAction(next); });
+  document.getElementById("prev").addEventListener("click", function () { userAction(prev); });
+  autoBtn.addEventListener("click", function () { setAuto(!auto); });
+  document.getElementById("full").addEventListener("click", toggleFull);
+  viewport.addEventListener("click", function (e) {
+    if (e.target && e.target.closest && e.target.closest("a, video")) return;
+    userAction(next);
+  });
+
+  function toggleFull() {
+    try {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
+    } catch (e) { /* not available */ }
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.target && e.target.closest && e.target.closest("a, button, video") && (e.key === "Enter" || e.key === " ")) return;
+    var k = e.key;
+    if (k === "ArrowRight" || k === "PageDown" || k === " " || k === "Enter") { e.preventDefault(); userAction(next); }
+    else if (k === "ArrowLeft" || k === "PageUp" || k === "Backspace") { e.preventDefault(); userAction(prev); }
+    else if (k === "Home") userAction(function () { go(0); });
+    else if (k === "End") userAction(function () { go(LAST); });
+    else if (k === "a" || k === "A") setAuto(!auto);
+    else if (k === "f" || k === "F") toggleFull();
+  });
+
+  var x0 = null;
+  viewport.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  viewport.addEventListener("touchend", function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0; x0 = null;
+    if (Math.abs(dx) > 40) { e.preventDefault(); userAction(dx < 0 ? next : prev); }
+  });
+
+  // --- analytics: only if the visitor accepted analytics cookies on openfrontend.org ---
+  // The main site stores that choice in localStorage under "/.__consent". This page shows no
+  // banner of its own, so a visitor who lands here first is simply not measured.
+  var GA_ID = "G-EE9GP17131", gaOn = false;
+  function gtag() { window.dataLayer.push(arguments); }
+  try {
+    var consent = JSON.parse(localStorage.getItem("/.__consent") || "null");
+    if (consent && consent.analytics) {
+      window.dataLayer = window.dataLayer || [];
+      gtag("js", new Date()); gtag("config", GA_ID);
+      var s = document.createElement("script"); s.async = true;
+      s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+      document.head.appendChild(s);
+      gaOn = true;
+    }
+  } catch (e) { /* storage blocked */ }
+  function track(name, params) { if (gaOn) gtag("event", name, params || {}); }
+  document.addEventListener("click", function (e) {
+    var a = e.target && e.target.closest && e.target.closest("[data-ofe-event]");
+    if (a) track(a.getAttribute("data-ofe-event"), { link_url: a.href || "", step: step });
+  });
+
+  // A link can open a given step: /walkthrough/#step=4. Also when the page is already open.
+  function fromHash() {
+    var m = /step=(\d+)/.exec(location.hash);
+    return m ? Math.max(0, Math.min(LAST, Number(m[1]))) : null;
+  }
+  var h0 = fromHash();
+  if (h0 !== null) step = h0;
+  window.addEventListener("hashchange", function () {
+    var n = fromHash();
+    if (n !== null && n !== step) userAction(function () { go(n); });
+  });
+
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(viewport);
+  window.addEventListener("resize", fit);
+  fit();
+  render();
+})();
+</script>
+</body>
+</html>

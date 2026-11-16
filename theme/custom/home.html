@@ -245,7 +245,7 @@
         .ofe-footer .ofe-inner { grid-template-columns: repeat(3, 1fr); }
     }
     @media screen and (min-width: 64em) {
-        .ofe-grid--4 { grid-template-columns: repeat(4, 1fr); }
+        .ofe-grid--4 { grid-template-columns: repeat(5, 1fr); }
     }
 </style>
 
@@ -261,6 +261,7 @@
         <div class="ofe-actions">
           <a class="ofe-btn ofe-btn--primary" href="tutorials/deploy-with-cloud-shell/" data-ofe-event="deploy_cta_click">Deploy it in Cloud Shell</a>
           <a class="ofe-btn ofe-btn--tonal" href="admins/admin_guide/">Read the Admin Guide</a>
+          <a class="ofe-btn ofe-btn--text" href="walkthrough/" data-ofe-event="walkthrough_click">Watch the walkthrough</a>
           <a class="ofe-btn ofe-btn--text" href="{{ ofe_repo }}" data-ofe-event="github_click">GitHub</a>
         </div>
       </div>
@@ -463,6 +464,11 @@ cd cluster-toolkit/community/front-end/ofe
           <h3>Deploy with Cloud Shell <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></h3>
           <p>Guided, step by step, from an empty project to a ready cluster.</p>
         </a>
+        <a class="ofe-doc" href="walkthrough/" data-ofe-event="walkthrough_click">
+          <span class="ofe-doc__eyebrow">Presentation</span>
+          <h3>Walkthrough <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></h3>
+          <p>Fifteen steps: the architecture, live screens and the Gemini cluster builder demo.</p>
+        </a>
         <a class="ofe-doc" href="users/user_guide/">
           <span class="ofe-doc__eyebrow">Users</span>
           <h3>User Guide <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg></h3>
@@ -519,6 +525,7 @@ cd cluster-toolkit/community/front-end/ofe
       <div>
         <h3>Documentation</h3>
         <ul>
+          <li><a href="walkthrough/">Walkthrough</a></li>
           <li><a href="tutorials/deploy-with-cloud-shell/">Deploy with Cloud Shell</a></li>
           <li><a href="users/user_guide/">User Guide</a></li>
           <li><a href="users/workbench_user_guide/">Workbench User Guide</a></li>
