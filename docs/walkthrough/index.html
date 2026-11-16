@@ -408,6 +408,29 @@
   .blk.portal h3 .ico { background: rgba(130, 200, 241, 0.16); color: var(--hero); }
   .blk .sub.flush { margin-left: 40px; }
 
+  /* teaser: a small, tilted browser frame shown only on step 1 */
+  .teaser {
+    position: absolute; left: 690px; top: 232px; width: 580px; z-index: 1;
+    opacity: 0; transform: perspective(1400px) rotateY(-16deg) translateX(46px) scale(0.94);
+    transform-origin: left center; pointer-events: none;
+    transition: opacity var(--t) var(--ease), transform var(--t) var(--ease);
+  }
+  .teaser.is-now { opacity: 1; transform: perspective(1400px) rotateY(-9deg); transition-delay: 350ms; }
+  .teaser figure {
+    margin: 0; border-radius: 12px; overflow: hidden; background: #0d1826;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 22px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,153,219,0.3), 0 0 50px rgba(0,153,219,0.16);
+  }
+  .teaser .bar {
+    height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 11px;
+    background: color-mix(in srgb, #16283E 80%, #FFFFFF 6%); border-bottom: 1px solid var(--line);
+    font-size: 11px; font-weight: 600; color: #EAEAEA; white-space: nowrap;
+  }
+  .teaser .bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.22); flex: none; }
+  .teaser .bar span { margin-left: 5px; }
+  .teaser img { display: block; width: 100%; height: auto; background: #fff; }
+  .teaser .cap { display: block; margin-top: 12px; text-align: center; font-size: 13px; font-weight: 600; color: var(--hero); letter-spacing: 0.02em; }
+
   /* screens */
   .screens {
     position: absolute; inset: 0; display: grid; place-items: center;
@@ -564,6 +587,15 @@
               <span class="chip">Benchmarks</span>
             </div>
           </section>
+
+          <!-- 1 only: a teaser of the real portal, beside its block; the full screens follow from step 5 -->
+          <div class="teaser" data-in="1" aria-hidden="true">
+            <figure>
+              <div class="bar"><i></i><i></i><i></i><span>Open Front End · Home</span></div>
+              <img src="home.webp" width="1440" height="667" alt="" />
+            </figure>
+            <span class="cap">The real thing. Live screens follow.</span>
+          </div>
 
           <!-- 2: the Cluster Toolkit core -->
           <section class="blk core" data-in="2" style="left:340px; top:286px; width:520px; height:244px;">
@@ -838,7 +870,7 @@
   // Where the camera looks at each step: focus point (stage units) and zoom.
   var CAMERA = [
     { x: 600, y: 450, s: 1.0 },  // title (blurred)
-    { x: 600, y: 210, s: 1.5 },  // the portal
+    { x: 800, y: 330, s: 1.2 },  // the portal, with its teaser screenshot beside it
     { x: 600, y: 452, s: 1.16 }, // + Cluster Toolkit, Slurm cluster, Google Cloud
     { x: 500, y: 470, s: 1.06 }, // + compliant foundations
     { x: 500, y: 450, s: 1.0 },  // + user experience
