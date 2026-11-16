@@ -55,6 +55,7 @@ plugins:
 
 nav:
   - Home: index.md
+  - Walkthrough: https://openfrontend.org/walkthrough/
   - Tutorials:
     - Deploy with Cloud Shell: tutorials/deploy-with-cloud-shell.md
   - Users:
